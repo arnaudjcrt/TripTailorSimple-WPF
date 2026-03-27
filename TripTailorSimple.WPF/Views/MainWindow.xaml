@@ -1,0 +1,525 @@
+﻿<Window x:Class="TripTailorSimple.WPF.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="TripTailor"
+        Height="900"
+        Width="1500"
+        MinHeight="800"
+        MinWidth="1300"
+        WindowStartupLocation="CenterScreen"
+        Background="#F7F9FB">
+
+    <Window.Resources>
+        <SolidColorBrush x:Key="FondPrincipal" Color="#F7F9FB"/>
+        <SolidColorBrush x:Key="FondCarte" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="FondBarreLaterale" Color="#F3F6F6"/>
+        <SolidColorBrush x:Key="BordureClaire" Color="#E3EAEA"/>
+        <SolidColorBrush x:Key="VertPrincipal" Color="#006B5F"/>
+        <SolidColorBrush x:Key="TexteFonce" Color="#191C1E"/>
+        <SolidColorBrush x:Key="TexteSecondaire" Color="#6B7A76"/>
+
+        <Style x:Key="BoutonMenuStyle" TargetType="Button">
+            <Setter Property="Height" Value="44"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+            <Setter Property="Padding" Value="16,8"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{StaticResource TexteFonce}"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="BoutonPrincipalStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource VertPrincipal}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource VertPrincipal}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="BoutonSecondaireStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="{StaticResource TexteFonce}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BordureClaire}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="18,10"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="CarteStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource FondCarte}"/>
+            <Setter Property="CornerRadius" Value="18"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BordureClaire}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="20"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Barre latérale -->
+        <Border Grid.Column="0"
+                Background="{StaticResource FondBarreLaterale}"
+                BorderBrush="{StaticResource BordureClaire}"
+                BorderThickness="0,0,1,0">
+            <Grid Margin="0,24,0,24">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <StackPanel Margin="28,0,28,0">
+                    <TextBlock Text="TripTailor"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Foreground="{StaticResource VertPrincipal}"/>
+                    <TextBlock Text="CURATEUR VOYAGE"
+                               Margin="0,6,0,0"
+                               FontSize="11"
+                               FontWeight="SemiBold"
+                               Foreground="{StaticResource TexteSecondaire}"/>
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Margin="18,28,18,0">
+                    <Button x:Name="BtnMenuRecherche"
+                            Click="BtnMenuRecherche_Click"
+                            Content="Recherche"
+                            Style="{StaticResource BoutonMenuStyle}"/>
+
+                    <Button x:Name="BtnMenuResultats"
+                            Click="BtnMenuResultats_Click"
+                            Content="Résultats"
+                            Style="{StaticResource BoutonMenuStyle}"/>
+
+                    <Button x:Name="BtnMenuDetail"
+                            Click="BtnMenuDetail_Click"
+                            Content="Détail du voyage"
+                            Style="{StaticResource BoutonMenuStyle}"/>
+
+                    <Button x:Name="BtnOuvrirChat"
+                            Click="BtnOuvrirChat_Click"
+                            Content="Assistant voyage"
+                            Style="{StaticResource BoutonMenuStyle}"/>
+                </StackPanel>
+
+                <Border Grid.Row="2"
+                        Margin="20,0,20,0"
+                        Padding="14"
+                        Background="White"
+                        CornerRadius="16"
+                        BorderBrush="{StaticResource BordureClaire}"
+                        BorderThickness="1">
+                    <StackPanel>
+                        <TextBlock Text="Projet actuel"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource TexteFonce}"/>
+                        <TextBlock x:Name="TxtResumeEtat"
+                                   Margin="0,6,0,0"
+                                   Text="Prêt"
+                                   FontSize="12"
+                                   Foreground="{StaticResource TexteSecondaire}"
+                                   TextWrapping="Wrap"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Zone principale -->
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0"
+                    Background="White"
+                    BorderBrush="{StaticResource BordureClaire}"
+                    BorderThickness="0,0,0,1">
+                <Grid Margin="24,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel VerticalAlignment="Center">
+                        <TextBlock x:Name="TxtTitreSection"
+                                   Text="Recherche"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Foreground="{StaticResource TexteFonce}"/>
+                        <TextBlock x:Name="TxtSousTitreSection"
+                                   Text="Définis ton voyage idéal"
+                                   FontSize="12"
+                                   Foreground="{StaticResource TexteSecondaire}"/>
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center">
+                        <Button Content="↻"
+                                Width="40"
+                                Height="40"
+                                Margin="0,0,10,0"
+                                Click="BtnReinitialiser_Click"
+                                Style="{StaticResource BoutonSecondaireStyle}"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <!-- Contenu -->
+            <Grid Grid.Row="1">
+
+                <!-- Recherche -->
+                <ScrollViewer x:Name="SectionRecherche"
+                              VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="32">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Margin="0,0,0,26">
+                            <TextBlock Text="Où commence ta prochaine histoire ?"
+                                       FontSize="40"
+                                       FontWeight="ExtraBold"
+                                       Foreground="{StaticResource TexteFonce}"/>
+                            <TextBlock Margin="0,12,0,0"
+                                       MaxWidth="900"
+                                       Text="Choisis le climat, les régions, le budget et la durée. TripTailor te propose ensuite des destinations avec estimation vol + hôtel + activités."
+                                       FontSize="16"
+                                       Foreground="{StaticResource TexteSecondaire}"
+                                       TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2.2*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Style="{StaticResource CarteStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="Climat recherché"
+                                               FontSize="13"
+                                               FontWeight="Bold"
+                                               Foreground="{StaticResource VertPrincipal}"/>
+                                    <ComboBox x:Name="ComboClimat"
+                                              Margin="0,10,0,24"
+                                              Height="38"
+                                              SelectedIndex="1">
+                                        <ComboBoxItem Content="Chaud"/>
+                                        <ComboBoxItem Content="Tempéré"/>
+                                        <ComboBoxItem Content="Froid"/>
+                                    </ComboBox>
+
+                                    <TextBlock Text="Régions"
+                                               FontSize="13"
+                                               FontWeight="Bold"
+                                               Foreground="{StaticResource VertPrincipal}"/>
+                                    <WrapPanel Margin="0,10,0,24">
+                                        <CheckBox x:Name="ChkEurope" Content="Europe" Margin="0,0,18,10"/>
+                                        <CheckBox x:Name="ChkAsie" Content="Asie" Margin="0,0,18,10"/>
+                                        <CheckBox x:Name="ChkAfrique" Content="Afrique" Margin="0,0,18,10"/>
+                                        <CheckBox x:Name="ChkAmeriques" Content="Amériques" Margin="0,0,18,10"/>
+                                        <CheckBox x:Name="ChkOceanie" Content="Océanie" Margin="0,0,18,10"/>
+                                    </WrapPanel>
+
+                                    <TextBlock Text="Style de voyage"
+                                               FontSize="13"
+                                               FontWeight="Bold"
+                                               Foreground="{StaticResource VertPrincipal}"/>
+                                    <ComboBox x:Name="ComboStyleVoyage"
+                                              Margin="0,10,0,0"
+                                              Height="38"
+                                              SelectedIndex="1">
+                                        <ComboBoxItem Content="Économique"/>
+                                        <ComboBoxItem Content="Confort"/>
+                                        <ComboBoxItem Content="Luxe"/>
+                                    </ComboBox>
+                                </StackPanel>
+                            </Border>
+
+                            <StackPanel Grid.Column="1" Margin="20,0,0,0">
+                                <Border Style="{StaticResource CarteStyle}" Margin="0,0,0,18">
+                                    <StackPanel>
+                                        <TextBlock Text="Budget maximum"
+                                                   FontSize="13"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource VertPrincipal}"/>
+                                        <Grid Margin="0,12,0,6">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="500 €" FontWeight="Bold"/>
+                                            <TextBlock x:Name="TxtBudget"
+                                                       Grid.Column="1"
+                                                       Text="2000 €"
+                                                       FontWeight="Bold"
+                                                       Foreground="{StaticResource VertPrincipal}"/>
+                                        </Grid>
+                                        <Slider x:Name="SliderBudget"
+                                                Minimum="500"
+                                                Maximum="6000"
+                                                Value="2000"
+                                                TickFrequency="100"
+                                                IsSnapToTickEnabled="True"
+                                                ValueChanged="SliderBudget_ValueChanged"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{StaticResource CarteStyle}" Margin="0,0,0,18">
+                                    <StackPanel>
+                                        <TextBlock Text="Durée"
+                                                   FontSize="13"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource VertPrincipal}"/>
+                                        <Grid Margin="0,14,0,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+
+                                            <Button Content="-"
+                                                    Width="40"
+                                                    Height="40"
+                                                    Click="BtnMoinsJour_Click"
+                                                    Style="{StaticResource BoutonSecondaireStyle}"/>
+
+                                            <StackPanel Grid.Column="1" HorizontalAlignment="Center">
+                                                <TextBlock x:Name="TxtNombreJours"
+                                                           Text="7"
+                                                           FontSize="34"
+                                                           FontWeight="Black"
+                                                           HorizontalAlignment="Center"/>
+                                                <TextBlock Text="jours"
+                                                           FontSize="12"
+                                                           Foreground="{StaticResource TexteSecondaire}"
+                                                           HorizontalAlignment="Center"/>
+                                            </StackPanel>
+
+                                            <Button Grid.Column="2"
+                                                    Content="+"
+                                                    Width="40"
+                                                    Height="40"
+                                                    Click="BtnPlusJour_Click"
+                                                    Style="{StaticResource BoutonPrincipalStyle}"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{StaticResource CarteStyle}">
+                                    <TextBlock Text="Astuce : les résultats combinent météo moyenne, prix estimé, popularité et adéquation avec tes critères."
+                                               TextWrapping="Wrap"
+                                               Foreground="{StaticResource TexteSecondaire}"
+                                               FontStyle="Italic"/>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+
+                        <StackPanel Grid.Row="2"
+                                    Margin="0,28,0,0"
+                                    HorizontalAlignment="Center">
+                            <Button x:Name="BtnRechercher"
+                                    Content="Trouver mon voyage"
+                                    Width="280"
+                                    Height="54"
+                                    Click="BtnRechercher_Click"
+                                    Style="{StaticResource BoutonPrincipalStyle}"/>
+                            <TextBlock Margin="0,12,0,0"
+                                       Text="Recherche optimisée avec météo, résumé de destination, suggestions et liens externes."
+                                       Foreground="{StaticResource TexteSecondaire}"
+                                       HorizontalAlignment="Center"/>
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+
+                <!-- Résultats -->
+                <Grid x:Name="SectionResultats" Visibility="Collapsed">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Margin="24,24,24,14">
+                        <Button Content="← Retour recherche"
+                                Click="BtnRetourRecherche_Click"
+                                Margin="0,0,14,0"
+                                Style="{StaticResource BoutonSecondaireStyle}"/>
+                        <TextBlock x:Name="TxtNombreResultats"
+                                   VerticalAlignment="Center"
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="{StaticResource TexteSecondaire}"/>
+                    </StackPanel>
+
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <WrapPanel x:Name="PanelResultats" Margin="24,0,24,24"/>
+                    </ScrollViewer>
+                </Grid>
+
+                <!-- Détail -->
+                <ScrollViewer x:Name="SectionDetail"
+                              Visibility="Collapsed"
+                              VerticalScrollBarVisibility="Auto">
+                    <Grid Margin="28">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,18">
+                            <Button Content="← Retour résultats"
+                                    Click="BtnRetourResultats_Click"
+                                    Margin="0,0,14,0"
+                                    Style="{StaticResource BoutonSecondaireStyle}"/>
+                            <Button Content="Voir les vols"
+                                    Click="BtnVoirVols_Click"
+                                    Margin="0,0,10,0"
+                                    Style="{StaticResource BoutonPrincipalStyle}"/>
+                            <Button Content="Voir l'hôtel"
+                                    Click="BtnVoirHotel_Click"
+                                    Margin="0,0,10,0"
+                                    Style="{StaticResource BoutonSecondaireStyle}"/>
+                            <Button Content="Voir activités"
+                                    Click="BtnVoirActivites_Click"
+                                    Style="{StaticResource BoutonSecondaireStyle}"/>
+                        </StackPanel>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2.1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0"
+                                    CornerRadius="18"
+                                    BorderBrush="{StaticResource BordureClaire}"
+                                    BorderThickness="1"
+                                    Background="White"
+                                    Margin="0,0,20,0">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="360"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+
+                                    <Grid>
+                                        <Image x:Name="ImgDestination" Stretch="Fill"/>
+                                        <Border Background="#4A000000"/>
+                                        <StackPanel VerticalAlignment="Bottom" Margin="24">
+                                            <TextBlock x:Name="TxtVillePays"
+                                                       FontSize="40"
+                                                       FontWeight="ExtraBold"
+                                                       Foreground="White"/>
+                                            <TextBlock x:Name="TxtRegionPays"
+                                                       Margin="0,6,0,0"
+                                                       FontSize="14"
+                                                       FontWeight="SemiBold"
+                                                       Foreground="White"/>
+                                        </StackPanel>
+                                    </Grid>
+
+                                    <StackPanel Grid.Row="1" Margin="20">
+                                        <TextBlock Text="Description"
+                                                   FontSize="18"
+                                                   FontWeight="Bold"
+                                                   Foreground="{StaticResource TexteFonce}"/>
+                                        <TextBlock x:Name="TxtDescription"
+                                                   Margin="0,10,0,0"
+                                                   TextWrapping="Wrap"
+                                                   FontSize="14"
+                                                   Foreground="{StaticResource TexteSecondaire}"/>
+                                    </StackPanel>
+                                </Grid>
+                            </Border>
+
+                            <StackPanel Grid.Column="1">
+                                <Border Style="{StaticResource CarteStyle}" Margin="0,0,0,18">
+                                    <StackPanel>
+                                        <TextBlock Text="Météo"
+                                                   FontSize="18"
+                                                   FontWeight="Bold"/>
+                                        <TextBlock x:Name="TxtMeteoActuelle"
+                                                   Margin="0,10,0,10"
+                                                   FontSize="24"
+                                                   FontWeight="Black"
+                                                   Foreground="{StaticResource VertPrincipal}"/>
+                                        <ListBox x:Name="ListePrevisions" Height="170"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Style="{StaticResource CarteStyle}">
+                                    <StackPanel>
+                                        <TextBlock Text="Budget"
+                                                   FontSize="18"
+                                                   FontWeight="Bold"/>
+                                        <ListBox x:Name="ListeBudget" Margin="0,10,0,0" Height="150"/>
+                                    </StackPanel>
+                                </Border>
+                            </StackPanel>
+                        </Grid>
+
+                        <Grid Grid.Row="2" Margin="0,22,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="1*"/>
+                                <ColumnDefinition Width="1*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Grid.Column="0" Style="{StaticResource CarteStyle}" Margin="0,0,10,0">
+                                <StackPanel>
+                                    <TextBlock Text="Activités payantes"
+                                               FontSize="18"
+                                               FontWeight="Bold"/>
+                                    <ListBox x:Name="ListeActivitesPayantes"
+                                             Margin="0,10,0,0"
+                                             Height="220"/>
+                                </StackPanel>
+                            </Border>
+
+                            <Border Grid.Column="1" Style="{StaticResource CarteStyle}" Margin="10,0,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Idées gratuites"
+                                               FontSize="18"
+                                               FontWeight="Bold"/>
+                                    <ListBox x:Name="ListeIdeesGratuites"
+                                             Margin="0,10,0,0"
+                                             Height="220"/>
+                                </StackPanel>
+                            </Border>
+                        </Grid>
+
+                        <Border Grid.Row="3"
+                                Margin="0,22,0,0"
+                                Style="{StaticResource CarteStyle}">
+                            <StackPanel>
+                                <TextBlock Text="Tags"
+                                           FontSize="18"
+                                           FontWeight="Bold"/>
+                                <WrapPanel x:Name="PanelTags" Margin="0,12,0,0"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>

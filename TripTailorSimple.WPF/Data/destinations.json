@@ -1,0 +1,47 @@
+[
+    {
+        "City": "Paris",
+        "Country": "France",
+        "Region": "Europe",
+        "Latitude": 48.8566,
+        "Longitude": 2.3522,
+        "Description": "Ville culturelle avec monuments et musées.",
+        "EstimatedPrice": 600
+    },
+    {
+        "City": "Rome",
+        "Country": "Italie",
+        "Region": "Europe",
+        "Latitude": 41.9028,
+        "Longitude": 12.4964,
+        "Description": "Destination historique idéale pour visiter.",
+        "EstimatedPrice": 700
+    },
+    {
+        "City": "Marrakech",
+        "Country": "Maroc",
+        "Region": "Afrique",
+        "Latitude": 31.6295,
+        "Longitude": -7.9811,
+        "Description": "Ville chaleureuse avec souks et ambiance locale.",
+        "EstimatedPrice": 500
+    },
+    {
+        "City": "Tokyo",
+        "Country": "Japon",
+        "Region": "Asie",
+        "Latitude": 35.6762,
+        "Longitude": 139.6503,
+        "Description": "Grande ville moderne avec culture japonaise.",
+        "EstimatedPrice": 1600
+    },
+    {
+        "City": "New York",
+        "Country": "États-Unis",
+        "Region": "Amérique",
+        "Latitude": 40.7128,
+        "Longitude": -74.0060,
+        "Description": "Ville dynamique pour un voyage urbain.",
+        "EstimatedPrice": 1800
+    }
+]
