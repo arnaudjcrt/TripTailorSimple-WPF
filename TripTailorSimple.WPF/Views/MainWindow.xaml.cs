@@ -341,7 +341,7 @@ namespace TripTailorSimple.WPF.Views
         private void AppliquerStyleBouton(Button btn, bool actif)
         {
             btn.Background = actif
-                ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EEF8FD"))
+                ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EAF7FD"))
                 : Brushes.White;
 
             btn.BorderBrush = actif
@@ -351,6 +351,8 @@ namespace TripTailorSimple.WPF.Views
             btn.Foreground = actif
                 ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D98B9"))
                 : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1D2733"));
+
+            btn.FontWeight = actif ? FontWeights.Bold : FontWeights.SemiBold;
         }
 
         private void BtnRegion_Click(object sender, RoutedEventArgs e)
@@ -404,7 +406,14 @@ namespace TripTailorSimple.WPF.Views
                     Background = Brushes.White,
                     CornerRadius = new CornerRadius(18),
                     BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E5E2")),
-                    BorderThickness = new Thickness(1)
+                    BorderThickness = new Thickness(1),
+                    Effect = new System.Windows.Media.Effects.DropShadowEffect
+                    {
+                        BlurRadius = 16,
+                        ShadowDepth = 3,
+                        Opacity = 0.12,
+                        Color = Colors.Black
+                    }
                 };
 
                 var racine = new StackPanel();
@@ -559,7 +568,8 @@ namespace TripTailorSimple.WPF.Views
                 var btnVoir = new Button
                 {
                     Content = "Explorer",
-                    Height = 40,
+                    Height = 42,
+                    BorderThickness = new Thickness(0),
                     Margin = new Thickness(0, 16, 0, 0),
                     Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#56B9E9")),
                     Foreground = Brushes.White,
@@ -637,7 +647,8 @@ namespace TripTailorSimple.WPF.Views
             var previsions = await _serviceMeteo.RecupererPrevisionsJournalieresAsync(
                 voyage.Latitude,
                 voyage.Longitude,
-                Math.Min(Math.Max(voyage.NombreJours, 7), 7));
+                7);
+           
 
             ConstruireMeteo(previsions, voyage.TemperatureMoyenne);
             ConstruireProgramme(voyage.Itineraire);
@@ -649,37 +660,39 @@ namespace TripTailorSimple.WPF.Views
         {
             PanelPrevisionsMeteo.Children.Clear();
 
-            if (previsions.Count == 0)
+            if (previsions == null || previsions.Count == 0)
             {
-                PanelPrevisionsMeteo.Children.Add(new Border
+                var cardErreur = new Border
                 {
                     Width = 180,
                     Margin = new Thickness(0, 0, 14, 14),
                     Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F7F9FB")),
                     BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E5E2")),
                     BorderThickness = new Thickness(1),
-                    CornerRadius = new CornerRadius(12),
-                    Padding = new Thickness(14),
-                    Child = new StackPanel
-                    {
-                        Children =
-                        {
-                            new TextBlock
-                            {
-                                Text = "Prévisions indisponibles",
-                                FontWeight = FontWeights.Bold
-                            },
-                            new TextBlock
-                            {
-                                Text = $"{temperatureSecours:0.#}°C",
-                                Margin = new Thickness(0,8,0,0),
-                                FontSize = 18,
-                                FontWeight = FontWeights.Black,
-                                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D98B9"))
-                            }
-                        }
-                    }
+                    CornerRadius = new CornerRadius(14),
+                    Padding = new Thickness(16)
+                };
+
+                var stackErreur = new StackPanel();
+
+                stackErreur.Children.Add(new TextBlock
+                {
+                    Text = "Prévisions indisponibles",
+                    FontWeight = FontWeights.Bold,
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1D2733"))
                 });
+
+                stackErreur.Children.Add(new TextBlock
+                {
+                    Text = $"{temperatureSecours:0.#}°C",
+                    Margin = new Thickness(0, 10, 0, 0),
+                    FontSize = 22,
+                    FontWeight = FontWeights.Black,
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D98B9"))
+                });
+
+                cardErreur.Child = stackErreur;
+                PanelPrevisionsMeteo.Children.Add(cardErreur);
                 return;
             }
 
@@ -687,52 +700,64 @@ namespace TripTailorSimple.WPF.Views
             {
                 var card = new Border
                 {
-                    Width = 145,
+                    Width = 150,
                     Margin = new Thickness(0, 0, 14, 14),
-                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F7F9FB")),
+                    Background = Brushes.White,
                     BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E5E2")),
                     BorderThickness = new Thickness(1),
-                    CornerRadius = new CornerRadius(12),
-                    Padding = new Thickness(14)
+                    CornerRadius = new CornerRadius(14),
+                    Padding = new Thickness(14),
+                    Effect = new System.Windows.Media.Effects.DropShadowEffect
+                    {
+                        BlurRadius = 12,
+                        ShadowDepth = 2,
+                        Opacity = 0.10,
+                        Color = Colors.Black
+                    }
                 };
 
                 var stack = new StackPanel();
 
                 stack.Children.Add(new TextBlock
                 {
-                    Text = p.Jour,
-                    FontSize = 12,
+                    Text = p.Jour.ToUpper(),
+                    FontSize = 11,
+                    FontWeight = FontWeights.Bold,
+                    HorizontalAlignment = HorizontalAlignment.Center,
                     Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6F7A86"))
                 });
 
                 stack.Children.Add(new TextBlock
                 {
                     Text = IcôneMeteo(p.ResumeMeteo),
-                    FontSize = 20,
-                    Margin = new Thickness(0, 8, 0, 8)
+                    FontSize = 28,
+                    Margin = new Thickness(0, 10, 0, 10),
+                    HorizontalAlignment = HorizontalAlignment.Center
                 });
 
                 stack.Children.Add(new TextBlock
                 {
                     Text = $"{p.Temperature:0.#}°C",
-                    FontSize = 18,
+                    FontSize = 20,
                     FontWeight = FontWeights.Black,
+                    HorizontalAlignment = HorizontalAlignment.Center,
                     Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1D2733"))
                 });
 
                 stack.Children.Add(new TextBlock
                 {
                     Text = p.ResumeMeteo,
-                    Margin = new Thickness(0, 6, 0, 0),
+                    Margin = new Thickness(0, 8, 0, 0),
                     TextWrapping = TextWrapping.Wrap,
-                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6F7A86"))
+                    TextAlignment = TextAlignment.Center,
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6F7A86")),
+                    FontSize = 12
                 });
 
                 card.Child = stack;
                 PanelPrevisionsMeteo.Children.Add(card);
             }
         }
-
         private void ConstruireProgramme(List<JourItineraire> itineraire)
         {
             PanelProgramme.Children.Clear();
@@ -745,7 +770,7 @@ namespace TripTailorSimple.WPF.Views
                     BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E5E2")),
                     BorderThickness = new Thickness(1),
                     CornerRadius = new CornerRadius(12),
-                    Padding = new Thickness(16),
+                    Padding = new Thickness(18),
                     Margin = new Thickness(0, 0, 0, 12)
                 };
 
@@ -754,16 +779,29 @@ namespace TripTailorSimple.WPF.Views
                 stack.Children.Add(new TextBlock
                 {
                     Text = jour.Titre,
-                    FontWeight = FontWeights.Bold,
+                    FontWeight = FontWeights.Black,
+                    FontSize = 15,
                     Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D98B9"))
                 });
+
+                if (!string.IsNullOrWhiteSpace(jour.DateLabel))
+                {
+                    stack.Children.Add(new TextBlock
+                    {
+                        Text = jour.DateLabel,
+                        Margin = new Thickness(0, 4, 0, 8),
+                        FontSize = 12,
+                        Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6F7A86"))
+                    });
+                }
 
                 foreach (var etape in jour.Etapes)
                 {
                     stack.Children.Add(new TextBlock
                     {
                         Text = etape,
-                        Margin = new Thickness(0, 6, 0, 0),
+                        Margin = new Thickness(0, 5, 0, 0),
+                        TextWrapping = TextWrapping.Wrap,
                         Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#374151"))
                     });
                 }
@@ -781,15 +819,24 @@ namespace TripTailorSimple.WPF.Views
             {
                 panel.Children.Add(new Border
                 {
-                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F5F7FA")),
+                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F8FAFC")),
                     BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(couleurBord)),
-                    BorderThickness = new Thickness(3, 0, 0, 0),
-                    CornerRadius = new CornerRadius(8),
-                    Padding = new Thickness(14),
+                    BorderThickness = new Thickness(4, 0, 0, 0),
+                    CornerRadius = new CornerRadius(10),
+                    Padding = new Thickness(16),
                     Margin = new Thickness(0, 0, 0, 10),
+                    Effect = new System.Windows.Media.Effects.DropShadowEffect
+                    {
+                        BlurRadius = 8,
+                        ShadowDepth = 1,
+                        Opacity = 0.06,
+                        Color = Colors.Black
+                    },
                     Child = new TextBlock
                     {
                         Text = ligne,
+                        TextWrapping = TextWrapping.Wrap,
+                        FontSize = 14,
                         Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1D2733"))
                     }
                 });
@@ -798,11 +845,22 @@ namespace TripTailorSimple.WPF.Views
 
         private static string IcôneMeteo(string resume)
         {
-            if (resume.Contains("Orage", StringComparison.OrdinalIgnoreCase)) return "⛈";
-            if (resume.Contains("Pluie", StringComparison.OrdinalIgnoreCase)) return "🌧";
-            if (resume.Contains("Neige", StringComparison.OrdinalIgnoreCase)) return "❄";
-            if (resume.Contains("Brouillard", StringComparison.OrdinalIgnoreCase)) return "🌫";
-            if (resume.Contains("nuage", StringComparison.OrdinalIgnoreCase)) return "⛅";
+            if (string.IsNullOrWhiteSpace(resume))
+                return "☀";
+
+            resume = resume.ToLower();
+
+            if (resume.Contains("orage")) return "⛈";
+            if (resume.Contains("averse")) return "🌦";
+            if (resume.Contains("pluie")) return "🌧";
+            if (resume.Contains("neige")) return "❄";
+            if (resume.Contains("brouillard")) return "🌫";
+            if (resume.Contains("nuage")) return "☁";
+            if (resume.Contains("partiellement")) return "⛅";
+            if (resume.Contains("variable")) return "🌤";
+            if (resume.Contains("ensole")) return "☀";
+            if (resume.Contains("clair")) return "☀";
+
             return "☀";
         }
 

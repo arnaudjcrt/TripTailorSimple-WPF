@@ -1,7 +1,11 @@
-﻿using System.Net.Http;
+﻿using System.Globalization;
+using System.Net.Http;
 using System.Text.Json;
+using System.Windows;
+using System.Windows;
 using TripTailorSimple.WPF.Modeles;
 using TripTailorSimple.WPF.Models;
+using System.Globalization;
 
 namespace TripTailorSimple.WPF.Services;
 
@@ -47,19 +51,26 @@ public sealed class ServiceMeteo
     }
 
     public async Task<List<PrevisionJournaliere>> RecupererPrevisionsJournalieresAsync(
-        double latitude,
-        double longitude,
-        int nombreJours,
-        CancellationToken cancellationToken = default)
+    double latitude,
+    double longitude,
+    int nombreJours,
+    CancellationToken cancellationToken = default)
     {
         var resultat = new List<PrevisionJournaliere>();
 
         try
         {
+            
+
             var jours = Math.Clamp(nombreJours, 1, 10);
 
+            var lat = latitude.ToString(CultureInfo.InvariantCulture);
+            var lon = longitude.ToString(CultureInfo.InvariantCulture);
+
             var url =
-                $"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&forecast_days={jours}";
+                $"https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&daily=temperature_2m_max,temperature_2m_min,weather_code&timezone=auto&forecast_days={jours}";
+
+            
 
             using var response = await _httpClient.GetAsync(url, cancellationToken);
             response.EnsureSuccessStatusCode();
@@ -67,25 +78,38 @@ public sealed class ServiceMeteo
             await using var stream = await response.Content.ReadAsStreamAsync(cancellationToken);
             using var document = await JsonDocument.ParseAsync(stream, cancellationToken: cancellationToken);
 
-            var daily = document.RootElement.GetProperty("daily");
+            if (!document.RootElement.TryGetProperty("daily", out var daily))
+            {
+                
+                return resultat;
+            }
 
             var dates = daily.GetProperty("time").EnumerateArray().Select(x => x.GetString() ?? "").ToList();
             var maxTemps = daily.GetProperty("temperature_2m_max").EnumerateArray().Select(x => x.GetDouble()).ToList();
             var minTemps = daily.GetProperty("temperature_2m_min").EnumerateArray().Select(x => x.GetDouble()).ToList();
             var codes = daily.GetProperty("weather_code").EnumerateArray().Select(x => x.GetInt32()).ToList();
 
-            for (int i = 0; i < dates.Count && i < maxTemps.Count && i < minTemps.Count && i < codes.Count; i++)
+           
+
+            for (int i = 0; i < dates.Count && i < maxTemps.Count && i < minTemps.Count && i < codes.Count && i < jours; i++)
             {
+                var date = DateTime.TryParse(dates[i], out var d)
+                    ? d.ToString("ddd dd", System.Globalization.CultureInfo.GetCultureInfo("fr-FR"))
+                    : dates[i];
+
                 resultat.Add(new PrevisionJournaliere
                 {
-                    Jour = dates[i],
+                    Jour = date,
                     Temperature = Math.Round((maxTemps[i] + minTemps[i]) / 2.0, 1),
                     ResumeMeteo = MapperCodeMeteo(codes[i])
                 });
             }
+
+            
         }
-        catch
+        catch (Exception ex)
         {
+           
         }
 
         return resultat;

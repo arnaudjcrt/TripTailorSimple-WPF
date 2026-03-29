@@ -20,6 +20,29 @@
         <SolidColorBrush x:Key="GreenSoft" Color="#32C48D"/>
         <SolidColorBrush x:Key="OrangeSoft" Color="#FF9B5C"/>
 
+        <DropShadowEffect x:Key="SoftShadow"
+                  BlurRadius="18"
+                  ShadowDepth="3"
+                  Opacity="0.15"
+                  Color="#000000"/>
+
+        <Style x:Key="CardTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="18"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
+        </Style>
+
+        <Style x:Key="MutedTextStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextSoft}"/>
+            <Setter Property="FontSize" Value="13"/>
+        </Style>
+
+        <Style x:Key="SectionTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="30"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="{StaticResource BlueDark}"/>
+        </Style>
+
         <Style x:Key="NavButtonStyle" TargetType="Button">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="{StaticResource TextSoft}"/>
@@ -29,6 +52,45 @@
             <Setter Property="Margin" Value="0,0,8,0"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="FieldTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <Style x:Key="SoftPanelStyle" TargetType="Border">
+            <Setter Property="Background" Value="#FAFBFC"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderSoft}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="18"/>
+        </Style>
+
+        <Style x:Key="BigPrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource BlueMain}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Height" Value="52"/>
+            <Setter Property="Padding" Value="18,12"/>
+        </Style>
+
+        <Style x:Key="ModernChipStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="Foreground" Value="{StaticResource TextDark}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderSoft}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="16,9"/>
+            <Setter Property="Margin" Value="0,0,10,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
 
         <Style x:Key="PrimaryButtonStyle" TargetType="Button">
@@ -92,7 +154,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="250"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="240"/>
+                    <ColumnDefinition Width="160"/>
                 </Grid.ColumnDefinitions>
 
                 <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -101,8 +163,8 @@
                                Foreground="{StaticResource BlueMain}"
                                Margin="0,0,8,0"/>
                     <TextBlock Text="TripTailor"
-                               FontSize="24"
-                               FontWeight="Bold"
+                               FontSize="26"
+                               FontWeight="Black"
                                Foreground="{StaticResource BlueMain}"/>
                 </StackPanel>
 
@@ -118,19 +180,16 @@
                             Content="Destinations"
                             Click="BtnNavDestinations_Click"
                             Style="{StaticResource NavButtonStyle}"/>
-                    <Button Content="Connexion"
-                            Style="{StaticResource NavButtonStyle}"/>
-                    <Button Content="Inscription"
-                            Style="{StaticResource NavButtonStyle}"/>
+                   
                 </StackPanel>
 
                 <Button Grid.Column="2"
-                        Content="🤖 Assistant"
-                        Width="120"
-                        Height="40"
-                        HorizontalAlignment="Right"
-                        VerticalAlignment="Center"
-                        Click="BtnOuvrirChat_Click"
+                         Content="🤖 Assistant voyage"
+                         Width="150"
+                         Height="38"
+                         HorizontalAlignment="Right"
+                         VerticalAlignment="Center"
+                         Click="BtnOuvrirChat_Click"
                         Style="{StaticResource SecondaryButtonStyle}"/>
             </Grid>
         </Border>
@@ -140,178 +199,240 @@
             <Grid Margin="34">
                 <!-- ACCUEIL -->
                 <StackPanel x:Name="SectionAccueil">
+                    <StackPanel Margin="0,8,0,26" HorizontalAlignment="Center">
+                        <TextBlock Text="Trouvez votre destination idéale"
+                   FontSize="38"
+                   FontWeight="Black"
+                   Foreground="{StaticResource TextDark}"
+                   HorizontalAlignment="Center"/>
+                        <TextBlock Text="Choisis ton climat, ton budget, ta durée et tes régions. TripTailor te propose ensuite les meilleures destinations."
+                   Margin="0,10,0,0"
+                   FontSize="15"
+                   Foreground="{StaticResource TextSoft}"
+                   HorizontalAlignment="Center"
+                   TextAlignment="Center"
+                   MaxWidth="860"
+                   TextWrapping="Wrap"/>
+                    </StackPanel>
+
                     <Border Style="{StaticResource CardBorderStyle}"
-                            MaxWidth="980"
-                            HorizontalAlignment="Center">
+            MaxWidth="1040"
+            HorizontalAlignment="Center"
+            Padding="28">
                         <StackPanel>
+
+                            <!-- Ligne 1 -->
                             <Grid Margin="0,0,0,18">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Margin="0,0,12,0">
-                                    <TextBlock Text="Recherche libre"
-                                               FontWeight="Bold"
-                                               Foreground="{StaticResource TextDark}"/>
-                                    <TextBox x:Name="TxtRechercheLibre"
-                                             Height="38"
-                                             Margin="0,8,0,0"
-                                             VerticalContentAlignment="Center"
-                                             Text=""/>
-                                </StackPanel>
+                                <Border Grid.Column="0"
+                        Style="{StaticResource SoftPanelStyle}"
+                        Margin="0,0,10,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Recherche libre"
+                                   Style="{StaticResource FieldTitleStyle}"/>
+                                        <TextBox x:Name="TxtRechercheLibre"
+                                 Height="40"
+                                 VerticalContentAlignment="Center"
+                                 FontSize="14"
+                                 Padding="12,0"/>
+                                    </StackPanel>
+                                </Border>
 
-                                <StackPanel Grid.Column="1" Margin="12,0,0,0">
-                                    <TextBlock Text="Saison de voyage"
-                                               FontWeight="Bold"
-                                               Foreground="{StaticResource TextDark}"/>
-                                    <ComboBox x:Name="ComboSaison"
-                                              Height="38"
-                                              Margin="0,8,0,0"
-                                              SelectedIndex="0">
-                                        <ComboBoxItem Content="Été"/>
-                                        <ComboBoxItem Content="Printemps"/>
-                                        <ComboBoxItem Content="Automne"/>
-                                        <ComboBoxItem Content="Hiver"/>
-                                    </ComboBox>
-                                </StackPanel>
+                                <Border Grid.Column="1"
+                        Style="{StaticResource SoftPanelStyle}"
+                        Margin="10,0,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Saison de voyage"
+                                   Style="{StaticResource FieldTitleStyle}"/>
+                                        <ComboBox x:Name="ComboSaison"
+                                  Height="40"
+                                  FontSize="14"
+                                  SelectedIndex="0">
+                                            <ComboBoxItem Content="Été"/>
+                                            <ComboBoxItem Content="Printemps"/>
+                                            <ComboBoxItem Content="Automne"/>
+                                            <ComboBoxItem Content="Hiver"/>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </Border>
                             </Grid>
 
-                            <Grid Margin="0,0,0,20">
+                            <!-- Ligne 2 -->
+                            <Grid Margin="0,0,0,18">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
 
-                                <StackPanel Margin="0,0,12,0">
-                                    <TextBlock Text="Préférence climatique"
-                                               FontWeight="Bold"
-                                               Foreground="{StaticResource TextDark}"/>
-                                    <ComboBox x:Name="ComboClimat"
-                                              Height="38"
-                                              Margin="0,8,0,0"
-                                              SelectedIndex="1">
-                                        <ComboBoxItem Content="Chaud"/>
-                                        <ComboBoxItem Content="Tempéré"/>
-                                        <ComboBoxItem Content="Froid"/>
-                                    </ComboBox>
-                                </StackPanel>
+                                <Border Grid.Column="0"
+                        Style="{StaticResource SoftPanelStyle}"
+                        Margin="0,0,10,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Préférence climatique"
+                                   Style="{StaticResource FieldTitleStyle}"/>
+                                        <ComboBox x:Name="ComboClimat"
+                                  Height="40"
+                                  FontSize="14"
+                                  SelectedIndex="1">
+                                            <ComboBoxItem Content="Chaud"/>
+                                            <ComboBoxItem Content="Tempéré"/>
+                                            <ComboBoxItem Content="Froid"/>
+                                        </ComboBox>
+                                    </StackPanel>
+                                </Border>
 
-                                <StackPanel Grid.Column="1" Margin="12,0,0,0">
-                                    <TextBlock Text="Nombre de jours"
-                                               FontWeight="Bold"
-                                               Foreground="{StaticResource TextDark}"/>
-                                    <Grid Margin="0,8,0,0">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="50"/>
-                                            <ColumnDefinition Width="*"/>
-                                            <ColumnDefinition Width="50"/>
-                                        </Grid.ColumnDefinitions>
+                                <Border Grid.Column="1"
+                        Style="{StaticResource SoftPanelStyle}"
+                        Margin="10,0,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Nombre de jours"
+                                   Style="{StaticResource FieldTitleStyle}"/>
+                                        <Grid Margin="0,4,0,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="56"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="56"/>
+                                            </Grid.ColumnDefinitions>
 
-                                        <Button Content="-"
-                                                Click="BtnMoinsJour_Click"
-                                                Style="{StaticResource SecondaryButtonStyle}"/>
+                                            <Button Content="-"
+                                    Grid.Column="0"
+                                    Click="BtnMoinsJour_Click"
+                                    FontSize="20"
+                                    Style="{StaticResource SecondaryButtonStyle}"/>
 
-                                        <TextBlock x:Name="TxtNombreJours"
-                                                   Grid.Column="1"
-                                                   Text="7"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"
-                                                   FontSize="26"
-                                                   FontWeight="Black"
-                                                   Foreground="{StaticResource TextDark}"/>
+                                            <StackPanel Grid.Column="1"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center">
+                                                <TextBlock x:Name="TxtNombreJours"
+                                           Text="7"
+                                           FontSize="32"
+                                           FontWeight="Black"
+                                           Foreground="{StaticResource TextDark}"
+                                           HorizontalAlignment="Center"/>
+                                                <TextBlock Text="jours"
+                                           FontSize="12"
+                                           Foreground="{StaticResource TextSoft}"
+                                           HorizontalAlignment="Center"/>
+                                            </StackPanel>
 
-                                        <Button Grid.Column="2"
-                                                Content="+"
-                                                Click="BtnPlusJour_Click"
-                                                Style="{StaticResource PrimaryButtonStyle}"/>
-                                    </Grid>
-                                </StackPanel>
+                                            <Button Grid.Column="2"
+                                    Content="+"
+                                    Click="BtnPlusJour_Click"
+                                    FontSize="18"
+                                    Style="{StaticResource PrimaryButtonStyle}"/>
+                                        </Grid>
+                                    </StackPanel>
+                                </Border>
                             </Grid>
 
-                            <StackPanel Margin="0,0,0,18">
-                                <TextBlock x:Name="TxtBudgetLabel"
-                                           Text="Budget total (€) : 2000 €"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource TextDark}"/>
-                                <Slider x:Name="SliderBudget"
-                                        Margin="0,10,0,0"
-                                        Minimum="500"
-                                        Maximum="6000"
-                                        TickFrequency="100"
-                                        IsSnapToTickEnabled="True"
-                                        Value="2000"
-                                        ValueChanged="SliderBudget_ValueChanged"/>
-                            </StackPanel>
+                            <!-- Budget -->
+                            <Border Style="{StaticResource SoftPanelStyle}" Margin="0,0,0,18">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,8">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
 
-                            <StackPanel Margin="0,0,0,18">
-                                <TextBlock Text="Style de voyage"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource TextDark}"/>
-                                <WrapPanel Margin="0,10,0,0">
-                                    <Button x:Name="BtnStyleEconomique"
-                                            Content="Économique"
-                                            Click="BtnStyleEconomique_Click"
-                                            Style="{StaticResource ChipButtonStyle}"/>
-                                    <Button x:Name="BtnStyleConfort"
-                                            Content="Confort"
-                                            Click="BtnStyleConfort_Click"
-                                            Style="{StaticResource ChipButtonStyle}"/>
-                                    <Button x:Name="BtnStyleLuxe"
-                                            Content="Luxe"
-                                            Click="BtnStyleLuxe_Click"
-                                            Style="{StaticResource ChipButtonStyle}"/>
-                                </WrapPanel>
-                            </StackPanel>
+                                        <TextBlock Text="Budget total"
+                                   Style="{StaticResource FieldTitleStyle}"
+                                   Margin="0"/>
+                                        <TextBlock x:Name="TxtBudgetLabel"
+                                   Grid.Column="1"
+                                   Text="3100 €"
+                                   FontSize="16"
+                                   FontWeight="Black"
+                                   Foreground="{StaticResource BlueDark}"/>
+                                    </Grid>
 
-                            <StackPanel Margin="0,0,0,18">
-                                <TextBlock Text="Régions du monde"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource TextDark}"/>
-                                <WrapPanel Margin="0,10,0,0">
-                                    <Button x:Name="BtnRegionEurope" Content="Europe" Tag="Europe" Click="BtnRegion_Click" Style="{StaticResource ChipButtonStyle}"/>
-                                    <Button x:Name="BtnRegionAfriqueNord" Content="Afrique du Nord" Tag="Afrique du Nord" Click="BtnRegion_Click" Style="{StaticResource ChipButtonStyle}"/>
-                                    <Button x:Name="BtnRegionAfriqueSub" Content="Afrique subsaharienne" Tag="Afrique subsaharienne" Click="BtnRegion_Click" Style="{StaticResource ChipButtonStyle}"/>
-                                    <Button x:Name="BtnRegionMoyenOrient" Content="Moyen-Orient" Tag="Moyen-Orient" Click="BtnRegion_Click" Style="{StaticResource ChipButtonStyle}"/>
-                                    <Button x:Name="BtnRegionAsie" Content="Asie" Tag="Asie" Click="BtnRegion_Click" Style="{StaticResource ChipButtonStyle}"/>
-                                    <Button x:Name="BtnRegionAsieSudEst" Content="Asie du Sud-Est" Tag="Asie du Sud-Est" Click="BtnRegion_Click" Style="{StaticResource ChipButtonStyle}"/>
-                                    <Button x:Name="BtnRegionAmeriqueNord" Content="Amérique du Nord" Tag="Amérique du Nord" Click="BtnRegion_Click" Style="{StaticResource ChipButtonStyle}"/>
-                                    <Button x:Name="BtnRegionCaraibes" Content="Caraïbes / Amérique Centrale" Tag="Caraïbes / Amérique Centrale" Click="BtnRegion_Click" Style="{StaticResource ChipButtonStyle}"/>
-                                    <Button x:Name="BtnRegionAmeriqueSud" Content="Amérique du Sud" Tag="Amérique du Sud" Click="BtnRegion_Click" Style="{StaticResource ChipButtonStyle}"/>
-                                    <Button x:Name="BtnRegionOceanie" Content="Océanie" Tag="Océanie" Click="BtnRegion_Click" Style="{StaticResource ChipButtonStyle}"/>
-                                </WrapPanel>
-                            </StackPanel>
+                                    <Slider x:Name="SliderBudget"
+                            Minimum="500"
+                            Maximum="6000"
+                            TickFrequency="100"
+                            IsSnapToTickEnabled="True"
+                            Value="2000"
+                            ValueChanged="SliderBudget_ValueChanged"/>
+                                </StackPanel>
+                            </Border>
 
-                            <StackPanel Margin="0,0,0,22">
-                                <TextBlock Text="Inclure dans le voyage"
-                                           FontWeight="Bold"
-                                           Foreground="{StaticResource TextDark}"/>
-                                <WrapPanel Margin="0,10,0,0">
-                                    <CheckBox x:Name="ChkVolInclus" Content="Vol inclus" IsChecked="True" Margin="0,0,18,0"/>
-                                    <CheckBox x:Name="ChkHotelInclus" Content="Hôtel inclus" IsChecked="True" Margin="0,0,18,0"/>
-                                    <CheckBox x:Name="ChkActivitesPayantes" Content="Activités payantes" IsChecked="True" Margin="0,0,18,0"/>
-                                    <CheckBox x:Name="ChkIdeesGratuites" Content="Idées gratuites" IsChecked="True"/>
-                                </WrapPanel>
-                            </StackPanel>
+                            <!-- Style -->
+                            <Border Style="{StaticResource SoftPanelStyle}" Margin="0,0,0,18">
+                                <StackPanel>
+                                    <TextBlock Text="Style de voyage"
+                               Style="{StaticResource FieldTitleStyle}"/>
+                                    <WrapPanel Margin="0,6,0,0">
+                                        <Button x:Name="BtnStyleEconomique"
+                                Content="Économique"
+                                Click="BtnStyleEconomique_Click"
+                                Style="{StaticResource ModernChipStyle}"/>
+                                        <Button x:Name="BtnStyleConfort"
+                                Content="Confort"
+                                Click="BtnStyleConfort_Click"
+                                Style="{StaticResource ModernChipStyle}"/>
+                                        <Button x:Name="BtnStyleLuxe"
+                                Content="Luxe"
+                                Click="BtnStyleLuxe_Click"
+                                Style="{StaticResource ModernChipStyle}"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
 
+                            <!-- Régions -->
+                            <Border Style="{StaticResource SoftPanelStyle}" Margin="0,0,0,18">
+                                <StackPanel>
+                                    <TextBlock Text="Régions du monde"
+                               Style="{StaticResource FieldTitleStyle}"/>
+                                    <WrapPanel Margin="0,6,0,0">
+                                        <Button x:Name="BtnRegionEurope" Content="Europe" Tag="Europe" Click="BtnRegion_Click" Style="{StaticResource ModernChipStyle}"/>
+                                        <Button x:Name="BtnRegionAfriqueNord" Content="Afrique du Nord" Tag="Afrique du Nord" Click="BtnRegion_Click" Style="{StaticResource ModernChipStyle}"/>
+                                        <Button x:Name="BtnRegionAfriqueSub" Content="Afrique subsaharienne" Tag="Afrique subsaharienne" Click="BtnRegion_Click" Style="{StaticResource ModernChipStyle}"/>
+                                        <Button x:Name="BtnRegionMoyenOrient" Content="Moyen-Orient" Tag="Moyen-Orient" Click="BtnRegion_Click" Style="{StaticResource ModernChipStyle}"/>
+                                        <Button x:Name="BtnRegionAsie" Content="Asie" Tag="Asie" Click="BtnRegion_Click" Style="{StaticResource ModernChipStyle}"/>
+                                        <Button x:Name="BtnRegionAsieSudEst" Content="Asie du Sud-Est" Tag="Asie du Sud-Est" Click="BtnRegion_Click" Style="{StaticResource ModernChipStyle}"/>
+                                        <Button x:Name="BtnRegionAmeriqueNord" Content="Amérique du Nord" Tag="Amérique du Nord" Click="BtnRegion_Click" Style="{StaticResource ModernChipStyle}"/>
+                                        <Button x:Name="BtnRegionCaraibes" Content="Caraïbes / Amérique Centrale" Tag="Caraïbes / Amérique Centrale" Click="BtnRegion_Click" Style="{StaticResource ModernChipStyle}"/>
+                                        <Button x:Name="BtnRegionAmeriqueSud" Content="Amérique du Sud" Tag="Amérique du Sud" Click="BtnRegion_Click" Style="{StaticResource ModernChipStyle}"/>
+                                        <Button x:Name="BtnRegionOceanie" Content="Océanie" Tag="Océanie" Click="BtnRegion_Click" Style="{StaticResource ModernChipStyle}"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Options -->
+                            <Border Style="{StaticResource SoftPanelStyle}" Margin="0,0,0,22">
+                                <StackPanel>
+                                    <TextBlock Text="Inclure dans le voyage"
+                               Style="{StaticResource FieldTitleStyle}"/>
+                                    <WrapPanel Margin="0,8,0,0">
+                                        <CheckBox x:Name="ChkVolInclus" Content="Vol inclus" IsChecked="True" Margin="0,0,18,0"/>
+                                        <CheckBox x:Name="ChkHotelInclus" Content="Hôtel inclus" IsChecked="True" Margin="0,0,18,0"/>
+                                        <CheckBox x:Name="ChkActivitesPayantes" Content="Activités payantes" IsChecked="True" Margin="0,0,18,0"/>
+                                        <CheckBox x:Name="ChkIdeesGratuites" Content="Idées gratuites" IsChecked="True"/>
+                                    </WrapPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- CTA -->
                             <Button x:Name="BtnRechercher"
-                                    Content="Trouver ma destination"
-                                    Height="48"
-                                    Click="BtnRechercher_Click"
-                                    Style="{StaticResource PrimaryButtonStyle}"/>
+                    Content="Trouver ma destination"
+                    Click="BtnRechercher_Click"
+                    Style="{StaticResource BigPrimaryButtonStyle}"/>
                         </StackPanel>
                     </Border>
 
                     <StackPanel Margin="0,34,0,0" HorizontalAlignment="Center">
                         <TextBlock Text="Inspirez-vous"
-                                   FontSize="34"
-                                   FontWeight="Bold"
-                                   Foreground="{StaticResource TextDark}"
-                                   HorizontalAlignment="Center"/>
+                   FontSize="34"
+                   FontWeight="Bold"
+                   Foreground="{StaticResource TextDark}"
+                   HorizontalAlignment="Center"/>
                         <TextBlock Text="Pas d'idée précise ? Découvrez nos sélections prêtes à explorer"
-                                   Margin="0,8,0,24"
-                                   Foreground="{StaticResource TextSoft}"
-                                   HorizontalAlignment="Center"/>
+                   Margin="0,8,0,24"
+                   Foreground="{StaticResource TextSoft}"
+                   HorizontalAlignment="Center"/>
                     </StackPanel>
 
                     <WrapPanel HorizontalAlignment="Center">
@@ -355,9 +476,9 @@
                     </WrapPanel>
 
                     <TextBlock Text="© 2025 TripTailor — votre aventure sur mesure, partout dans le monde"
-                               Margin="0,24,0,12"
-                               HorizontalAlignment="Center"
-                               Foreground="{StaticResource TextSoft}"/>
+               Margin="0,24,0,12"
+               HorizontalAlignment="Center"
+               Foreground="{StaticResource TextSoft}"/>
                 </StackPanel>
 
                 <!-- RESULTATS -->
@@ -405,7 +526,14 @@
                             Margin="0,0,0,22">
                         <Grid>
                             <Image x:Name="ImgDestinationHero" Stretch="Fill"/>
-                            <Border Background="#55000000" CornerRadius="22"/>
+                            <Border CornerRadius="22">
+                                <Border.Background>
+                                    <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                        <GradientStop Color="#22000000" Offset="0"/>
+                                        <GradientStop Color="#77000000" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </Border.Background>
+                            </Border>
                             <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
                                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
                                     <Border Style="{StaticResource MiniInfoTagStyle}" Background="White">
