@@ -9,14 +9,18 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-	  <PackageReference Include="System.Text.Json" Version="10.0.5" />
+	  <None Remove="Data\destinations.json" />
 	</ItemGroup>
 
 	<ItemGroup>
-		<None Update="Data\destinations.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+	  <Content Include="Data\destinations.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+	  <PackageReference Include="System.Text.Json" Version="10.0.5" />
 	</ItemGroup>
 
 </Project>

@@ -30,5 +30,11 @@ public class PropositionVoyage
     public List<string> Activites { get; set; } = new();
     public List<string> IdeesGratuites { get; set; } = new();
 
+    public List<JourItineraire> Itineraire { get; set; } = new();
+    public int NombreJours { get; set; }
+    public string CompagnieVol { get; set; } = "";
+    public string NomHotel { get; set; } = "";
+    public string StyleVoyageAffiche { get; set; } = "";
+
     public string VillePays => $"{Ville}, {Pays}";
 }

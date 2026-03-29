@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using TripTailorSimple.WPF.Models;
-
+﻿using TripTailorSimple.WPF.Models;
 
 namespace TripTailorSimple.WPF.Services;
 
@@ -16,9 +8,12 @@ public class ServiceSuggestionsVoyage
     {
         return new List<string>
         {
-            $"Visite guidée premium de {d.Ville}",
-            $"Découverte gastronomique à {d.Ville}",
-            $"Excursion culturelle dans la région {d.Region}"
+            $"Tour gastronomique à {d.Ville}",
+            $"Cours de cuisine locale à {d.Ville}",
+            $"Visite culturelle dans la région {d.Region}",
+            $"Excursion guidée autour de {d.Ville}",
+            $"Découverte premium des incontournables de {d.Ville}",
+            $"Soirée typique à {d.Pays}"
         };
     }
 
@@ -28,7 +23,10 @@ public class ServiceSuggestionsVoyage
         {
             $"Balade libre dans les quartiers emblématiques de {d.Ville}",
             $"Point de vue et promenade au coucher du soleil",
-            $"Marché local et découverte de l’ambiance de {d.Pays}"
+            $"Marché local et découverte de l’ambiance de {d.Pays}",
+            $"Découverte à pied du centre historique de {d.Ville}",
+            $"Promenade dans les rues animées de {d.Ville}",
+            $"Architecture en plein air et photos souvenirs"
         };
     }
 
@@ -36,17 +34,57 @@ public class ServiceSuggestionsVoyage
     {
         var jours = new List<JourItineraire>();
 
-        for (int i = 1; i <= Math.Min(nombreJours, 5); i++)
+        var activites = GenererActivites(d);
+        var gratuites = GenererIdeesGratuites(d);
+
+        int totalJours = Math.Max(2, nombreJours);
+
+        for (int i = 1; i <= totalJours; i++)
         {
+            if (i == 1)
+            {
+                jours.Add(new JourItineraire
+                {
+                    Titre = $"Jour {i}",
+                    DateLabel = DateTime.Today.AddDays(i - 1).ToString("dd/MM/yyyy"),
+                    Etapes = new List<string>
+                    {
+                        $"✈ Arrivée à {d.Ville}",
+                        "🏨 Installation à l'hôtel",
+                        $"🚶 Première découverte libre de {d.Ville}"
+                    }
+                });
+                continue;
+            }
+
+            if (i == totalJours)
+            {
+                jours.Add(new JourItineraire
+                {
+                    Titre = $"Jour {i}",
+                    DateLabel = DateTime.Today.AddDays(i - 1).ToString("dd/MM/yyyy"),
+                    Etapes = new List<string>
+                    {
+                        "🧳 Dernières découvertes et temps libre",
+                        $"📷 Dernière promenade dans {d.Ville}",
+                        $"✈ Retour depuis {d.Ville}"
+                    }
+                });
+                continue;
+            }
+
+            string activite = activites[(i - 2) % activites.Count];
+            string gratuite = gratuites[(i - 2) % gratuites.Count];
+
             jours.Add(new JourItineraire
             {
                 Titre = $"Jour {i}",
                 DateLabel = DateTime.Today.AddDays(i - 1).ToString("dd/MM/yyyy"),
                 Etapes = new List<string>
                 {
-                    $"Matin : découverte de {d.Ville}",
-                    $"Après-midi : activité locale en {d.Region}",
-                    $"Soir : dîner typique à {d.Pays}"
+                    $"🎯 {activite}",
+                    $"🆓 {gratuite}",
+                    $"🌆 Soirée libre à {d.Ville}"
                 }
             });
         }

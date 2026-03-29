@@ -86,9 +86,15 @@ public class ServiceRechercheVoyage
                 PrixTotal = prixTotal,
 
                 UrlImage = ConstruireImagePlaceholder(destination.Ville),
-                Etiquettes = destination.Etiquettes.ToList(),
+                Etiquettes = destination.Etiquettes?.ToList() ?? new List<string>(),
                 Activites = _serviceSuggestionsVoyage.GenererActivites(destination),
                 IdeesGratuites = _serviceSuggestionsVoyage.GenererIdeesGratuites(destination),
+
+                Itineraire = _serviceSuggestionsVoyage.GenererItineraire(destination, criteres.NombreJours),
+                NombreJours = criteres.NombreJours,
+                CompagnieVol = SuggereCompagnie(destination.Region),
+                NomHotel = SuggereHotel(destination.Ville, criteres.StyleVoyage),
+                StyleVoyageAffiche = criteres.StyleVoyage,
 
                 UrlVol = ConstruireUrlVol(destination),
                 UrlHotel = ConstruireUrlHotel(destination),
@@ -172,13 +178,13 @@ public class ServiceRechercheVoyage
     {
         double score = 1000 - prixTotal;
 
-        if (criteres.Regions.Contains(destination.Region))
+        if (criteres.Regions.Contains(destination.Region, StringComparer.OrdinalIgnoreCase))
             score += 200;
 
         if (FiltreClimat(destination.Climat, criteres.Climat))
             score += 250;
 
-        score += destination.Etiquettes.Count * 20;
+        score += (destination.Etiquettes?.Count ?? 0) * 20;
 
         return score;
     }
@@ -201,5 +207,39 @@ public class ServiceRechercheVoyage
     private string ConstruireUrlActivites(DestinationBrute d)
     {
         return $"https://www.getyourguide.com/s/?q={Uri.EscapeDataString($"{d.Ville} {d.Pays}")}";
+    }
+
+    private string SuggereCompagnie(string region)
+    {
+        if (region.Contains("Asie", StringComparison.OrdinalIgnoreCase))
+            return "ANA";
+
+        if (region.Contains("Europe", StringComparison.OrdinalIgnoreCase))
+            return "Air France";
+
+        if (region.Contains("Afrique", StringComparison.OrdinalIgnoreCase))
+            return "Royal Air Maroc";
+
+        if (region.Contains("Amérique", StringComparison.OrdinalIgnoreCase)
+            || region.Contains("Caraïbes", StringComparison.OrdinalIgnoreCase))
+            return "LATAM";
+
+        if (region.Contains("Océanie", StringComparison.OrdinalIgnoreCase))
+            return "Qantas";
+
+        if (region.Contains("Orient", StringComparison.OrdinalIgnoreCase))
+            return "Emirates";
+
+        return "Compagnie partenaire";
+    }
+
+    private string SuggereHotel(string ville, string style)
+    {
+        return style switch
+        {
+            "Luxe" => $"Grand Hotel {ville} 5★",
+            "Économique" => $"City Budget Hotel {ville} 3★",
+            _ => $"Central Comfort Hotel {ville} 4★"
+        };
     }
 }

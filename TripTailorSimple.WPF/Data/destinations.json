@@ -1,47 +1,1802 @@
 [
-    {
-        "City": "Paris",
-        "Country": "France",
-        "Region": "Europe",
-        "Latitude": 48.8566,
-        "Longitude": 2.3522,
-        "Description": "Ville culturelle avec monuments et musées.",
-        "EstimatedPrice": 600
-    },
-    {
-        "City": "Rome",
-        "Country": "Italie",
-        "Region": "Europe",
-        "Latitude": 41.9028,
-        "Longitude": 12.4964,
-        "Description": "Destination historique idéale pour visiter.",
-        "EstimatedPrice": 700
-    },
-    {
-        "City": "Marrakech",
-        "Country": "Maroc",
-        "Region": "Afrique",
-        "Latitude": 31.6295,
-        "Longitude": -7.9811,
-        "Description": "Ville chaleureuse avec souks et ambiance locale.",
-        "EstimatedPrice": 500
-    },
-    {
-        "City": "Tokyo",
-        "Country": "Japon",
-        "Region": "Asie",
-        "Latitude": 35.6762,
-        "Longitude": 139.6503,
-        "Description": "Grande ville moderne avec culture japonaise.",
-        "EstimatedPrice": 1600
-    },
-    {
-        "City": "New York",
-        "Country": "États-Unis",
-        "Region": "Amérique",
-        "Latitude": 40.7128,
-        "Longitude": -74.0060,
-        "Description": "Ville dynamique pour un voyage urbain.",
-        "EstimatedPrice": 1800
-    }
+  {
+    "key": "paris-france",
+    "country": "France",
+    "city": "Paris",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 120,
+    "baseHotelPricePerNight": 110,
+    "baseActivitiesPrice": 180,
+    "averageTemperature": 18,
+    "latitude": 48.8566,
+    "longitude": 2.3522,
+    "tags": [
+      "Culture",
+      "Romantique",
+      "Musées"
+    ]
+  },
+  {
+    "key": "rome-italie",
+    "country": "Italie",
+    "city": "Rome",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 140,
+    "baseHotelPricePerNight": 95,
+    "baseActivitiesPrice": 170,
+    "averageTemperature": 22,
+    "latitude": 41.9028,
+    "longitude": 12.4964,
+    "tags": [
+      "Histoire",
+      "Food",
+      "Monuments"
+    ]
+  },
+  {
+    "key": "barcelone-espagne",
+    "country": "Espagne",
+    "city": "Barcelone",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 130,
+    "baseHotelPricePerNight": 100,
+    "baseActivitiesPrice": 160,
+    "averageTemperature": 21,
+    "latitude": 41.3874,
+    "longitude": 2.1686,
+    "tags": [
+      "Plage",
+      "Architecture",
+      "City Trip"
+    ]
+  },
+  {
+    "key": "lisbonne-portugal",
+    "country": "Portugal",
+    "city": "Lisbonne",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 110,
+    "baseHotelPricePerNight": 85,
+    "baseActivitiesPrice": 140,
+    "averageTemperature": 20,
+    "latitude": 38.7223,
+    "longitude": -9.1393,
+    "tags": [
+      "Soleil",
+      "Ville",
+      "Food"
+    ]
+  },
+  {
+    "key": "amsterdam-paysbas",
+    "country": "Pays-Bas",
+    "city": "Amsterdam",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 125,
+    "baseHotelPricePerNight": 120,
+    "baseActivitiesPrice": 150,
+    "averageTemperature": 14,
+    "latitude": 52.3676,
+    "longitude": 4.9041,
+    "tags": [
+      "Canaux",
+      "Culture",
+      "Vélo"
+    ]
+  },
+  {
+    "key": "berlin-allemagne",
+    "country": "Allemagne",
+    "city": "Berlin",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 115,
+    "baseHotelPricePerNight": 90,
+    "baseActivitiesPrice": 150,
+    "averageTemperature": 13,
+    "latitude": 52.52,
+    "longitude": 13.405,
+    "tags": [
+      "Histoire",
+      "Vie Nocturne",
+      "Culture"
+    ]
+  },
+  {
+    "key": "prague-tchequie",
+    "country": "Tchéquie",
+    "city": "Prague",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 105,
+    "baseHotelPricePerNight": 80,
+    "baseActivitiesPrice": 130,
+    "averageTemperature": 12,
+    "latitude": 50.0755,
+    "longitude": 14.4378,
+    "tags": [
+      "Architecture",
+      "Budget",
+      "Romantique"
+    ]
+  },
+  {
+    "key": "vienne-autriche",
+    "country": "Autriche",
+    "city": "Vienne",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 120,
+    "baseHotelPricePerNight": 100,
+    "baseActivitiesPrice": 145,
+    "averageTemperature": 13,
+    "latitude": 48.2082,
+    "longitude": 16.3738,
+    "tags": [
+      "Musique",
+      "Culture",
+      "Ville"
+    ]
+  },
+  {
+    "key": "budapest-hongrie",
+    "country": "Hongrie",
+    "city": "Budapest",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 100,
+    "baseHotelPricePerNight": 75,
+    "baseActivitiesPrice": 120,
+    "averageTemperature": 14,
+    "latitude": 47.4979,
+    "longitude": 19.0402,
+    "tags": [
+      "Thermes",
+      "Architecture",
+      "Budget"
+    ]
+  },
+  {
+    "key": "athenes-grece",
+    "country": "Grèce",
+    "city": "Athènes",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 135,
+    "baseHotelPricePerNight": 85,
+    "baseActivitiesPrice": 150,
+    "averageTemperature": 24,
+    "latitude": 37.9838,
+    "longitude": 23.7275,
+    "tags": [
+      "Histoire",
+      "Soleil",
+      "Food"
+    ]
+  },
+  {
+    "key": "santorin-grece",
+    "country": "Grèce",
+    "city": "Santorin",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 160,
+    "baseHotelPricePerNight": 140,
+    "baseActivitiesPrice": 170,
+    "averageTemperature": 23,
+    "latitude": 36.3932,
+    "longitude": 25.4615,
+    "tags": [
+      "Romantique",
+      "Île",
+      "Vue"
+    ]
+  },
+  {
+    "key": "mykonos-grece",
+    "country": "Grèce",
+    "city": "Mykonos",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 170,
+    "baseHotelPricePerNight": 150,
+    "baseActivitiesPrice": 180,
+    "averageTemperature": 24,
+    "latitude": 37.4467,
+    "longitude": 25.3289,
+    "tags": [
+      "Plage",
+      "Fête",
+      "Île"
+    ]
+  },
+  {
+    "key": "dubrovnik-croatie",
+    "country": "Croatie",
+    "city": "Dubrovnik",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 145,
+    "baseHotelPricePerNight": 110,
+    "baseActivitiesPrice": 155,
+    "averageTemperature": 21,
+    "latitude": 42.6507,
+    "longitude": 18.0944,
+    "tags": [
+      "Mer",
+      "Vieille Ville",
+      "Soleil"
+    ]
+  },
+  {
+    "key": "split-croatie",
+    "country": "Croatie",
+    "city": "Split",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 135,
+    "baseHotelPricePerNight": 95,
+    "baseActivitiesPrice": 150,
+    "averageTemperature": 20,
+    "latitude": 43.5081,
+    "longitude": 16.4402,
+    "tags": [
+      "Plage",
+      "Vieille Ville",
+      "Croisière"
+    ]
+  },
+  {
+    "key": "reykjavik-islande",
+    "country": "Islande",
+    "city": "Reykjavik",
+    "region": "Europe",
+    "climate": "Cold",
+    "baseFlightPrice": 280,
+    "baseHotelPricePerNight": 130,
+    "baseActivitiesPrice": 240,
+    "averageTemperature": 6,
+    "latitude": 64.1466,
+    "longitude": -21.9426,
+    "tags": [
+      "Nature",
+      "Aurores",
+      "Nordique"
+    ]
+  },
+  {
+    "key": "dublin-irlande",
+    "country": "Irlande",
+    "city": "Dublin",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 115,
+    "baseHotelPricePerNight": 110,
+    "baseActivitiesPrice": 140,
+    "averageTemperature": 11,
+    "latitude": 53.3498,
+    "longitude": -6.2603,
+    "tags": [
+      "Pub",
+      "Culture",
+      "Ville"
+    ]
+  },
+  {
+    "key": "edinbourg-ecosse",
+    "country": "Royaume-Uni",
+    "city": "Édimbourg",
+    "region": "Europe",
+    "climate": "Cold",
+    "baseFlightPrice": 125,
+    "baseHotelPricePerNight": 105,
+    "baseActivitiesPrice": 145,
+    "averageTemperature": 10,
+    "latitude": 55.9533,
+    "longitude": -3.1883,
+    "tags": [
+      "Château",
+      "Histoire",
+      "Festival"
+    ]
+  },
+  {
+    "key": "londres-angleterre",
+    "country": "Royaume-Uni",
+    "city": "Londres",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 120,
+    "baseHotelPricePerNight": 150,
+    "baseActivitiesPrice": 180,
+    "averageTemperature": 14,
+    "latitude": 51.5074,
+    "longitude": -0.1278,
+    "tags": [
+      "Musées",
+      "Shopping",
+      "Ville"
+    ]
+  },
+  {
+    "key": "oslo-norvege",
+    "country": "Norvège",
+    "city": "Oslo",
+    "region": "Europe",
+    "climate": "Cold",
+    "baseFlightPrice": 190,
+    "baseHotelPricePerNight": 140,
+    "baseActivitiesPrice": 190,
+    "averageTemperature": 8,
+    "latitude": 59.9139,
+    "longitude": 10.7522,
+    "tags": [
+      "Nordique",
+      "Fjords",
+      "Ville"
+    ]
+  },
+  {
+    "key": "stockholm-suede",
+    "country": "Suède",
+    "city": "Stockholm",
+    "region": "Europe",
+    "climate": "Cold",
+    "baseFlightPrice": 170,
+    "baseHotelPricePerNight": 130,
+    "baseActivitiesPrice": 180,
+    "averageTemperature": 9,
+    "latitude": 59.3293,
+    "longitude": 18.0686,
+    "tags": [
+      "Îles",
+      "Design",
+      "Nordique"
+    ]
+  },
+  {
+    "key": "copenhague-danemark",
+    "country": "Danemark",
+    "city": "Copenhague",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 160,
+    "baseHotelPricePerNight": 135,
+    "baseActivitiesPrice": 170,
+    "averageTemperature": 11,
+    "latitude": 55.6761,
+    "longitude": 12.5683,
+    "tags": [
+      "Design",
+      "Vélo",
+      "Ville"
+    ]
+  },
+  {
+    "key": "helsinki-finlande",
+    "country": "Finlande",
+    "city": "Helsinki",
+    "region": "Europe",
+    "climate": "Cold",
+    "baseFlightPrice": 170,
+    "baseHotelPricePerNight": 125,
+    "baseActivitiesPrice": 175,
+    "averageTemperature": 8,
+    "latitude": 60.1699,
+    "longitude": 24.9384,
+    "tags": [
+      "Nordique",
+      "Sauna",
+      "Mer"
+    ]
+  },
+  {
+    "key": "istanbul-turquie",
+    "country": "Turquie",
+    "city": "Istanbul",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 150,
+    "baseHotelPricePerNight": 80,
+    "baseActivitiesPrice": 145,
+    "averageTemperature": 18,
+    "latitude": 41.0082,
+    "longitude": 28.9784,
+    "tags": [
+      "Bazars",
+      "Culture",
+      "Food"
+    ]
+  },
+  {
+    "key": "antalya-turquie",
+    "country": "Turquie",
+    "city": "Antalya",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 145,
+    "baseHotelPricePerNight": 85,
+    "baseActivitiesPrice": 140,
+    "averageTemperature": 25,
+    "latitude": 36.8969,
+    "longitude": 30.7133,
+    "tags": [
+      "Resort",
+      "Plage",
+      "Soleil"
+    ]
+  },
+  {
+    "key": "zurich-suisse",
+    "country": "Suisse",
+    "city": "Zurich",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 160,
+    "baseHotelPricePerNight": 150,
+    "baseActivitiesPrice": 170,
+    "averageTemperature": 12,
+    "latitude": 47.3769,
+    "longitude": 8.5417,
+    "tags": [
+      "Lac",
+      "Ville",
+      "Montagne"
+    ]
+  },
+  {
+    "key": "geneve-suisse",
+    "country": "Suisse",
+    "city": "Genève",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 155,
+    "baseHotelPricePerNight": 145,
+    "baseActivitiesPrice": 165,
+    "averageTemperature": 13,
+    "latitude": 46.2044,
+    "longitude": 6.1432,
+    "tags": [
+      "Lac",
+      "Ville",
+      "International"
+    ]
+  },
+  {
+    "key": "bruxelles-belgique",
+    "country": "Belgique",
+    "city": "Bruxelles",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 95,
+    "baseHotelPricePerNight": 100,
+    "baseActivitiesPrice": 130,
+    "averageTemperature": 12,
+    "latitude": 50.8503,
+    "longitude": 4.3517,
+    "tags": [
+      "Ville",
+      "BD",
+      "Gastronomie"
+    ]
+  },
+  {
+    "key": "bruges-belgique",
+    "country": "Belgique",
+    "city": "Bruges",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 90,
+    "baseHotelPricePerNight": 110,
+    "baseActivitiesPrice": 120,
+    "averageTemperature": 11,
+    "latitude": 51.2093,
+    "longitude": 3.2247,
+    "tags": [
+      "Canaux",
+      "Romantique",
+      "Médiéval"
+    ]
+  },
+  {
+    "key": "venise-italie",
+    "country": "Italie",
+    "city": "Venise",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 145,
+    "baseHotelPricePerNight": 145,
+    "baseActivitiesPrice": 160,
+    "averageTemperature": 16,
+    "latitude": 45.4408,
+    "longitude": 12.3155,
+    "tags": [
+      "Canaux",
+      "Romantique",
+      "Culture"
+    ]
+  },
+  {
+    "key": "florence-italie",
+    "country": "Italie",
+    "city": "Florence",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 130,
+    "baseHotelPricePerNight": 110,
+    "baseActivitiesPrice": 155,
+    "averageTemperature": 17,
+    "latitude": 43.7696,
+    "longitude": 11.2558,
+    "tags": [
+      "Art",
+      "Renaissance",
+      "Culture"
+    ]
+  },
+  {
+    "key": "naples-italie",
+    "country": "Italie",
+    "city": "Naples",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 120,
+    "baseHotelPricePerNight": 90,
+    "baseActivitiesPrice": 145,
+    "averageTemperature": 19,
+    "latitude": 40.8518,
+    "longitude": 14.2681,
+    "tags": [
+      "Food",
+      "Ville",
+      "Histoire"
+    ]
+  },
+  {
+    "key": "seville-espagne",
+    "country": "Espagne",
+    "city": "Séville",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 120,
+    "baseHotelPricePerNight": 85,
+    "baseActivitiesPrice": 140,
+    "averageTemperature": 23,
+    "latitude": 37.3891,
+    "longitude": -5.9845,
+    "tags": [
+      "Soleil",
+      "Culture",
+      "Flamenco"
+    ]
+  },
+  {
+    "key": "madrid-espagne",
+    "country": "Espagne",
+    "city": "Madrid",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 125,
+    "baseHotelPricePerNight": 95,
+    "baseActivitiesPrice": 145,
+    "averageTemperature": 18,
+    "latitude": 40.4168,
+    "longitude": -3.7038,
+    "tags": [
+      "Musées",
+      "Ville",
+      "Vie Nocturne"
+    ]
+  },
+  {
+    "key": "valence-espagne",
+    "country": "Espagne",
+    "city": "Valence",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 115,
+    "baseHotelPricePerNight": 85,
+    "baseActivitiesPrice": 135,
+    "averageTemperature": 20,
+    "latitude": 39.4699,
+    "longitude": -0.3763,
+    "tags": [
+      "Plage",
+      "Food",
+      "Ville"
+    ]
+  },
+  {
+    "key": "porto-portugal",
+    "country": "Portugal",
+    "city": "Porto",
+    "region": "Europe",
+    "climate": "Mild",
+    "baseFlightPrice": 105,
+    "baseHotelPricePerNight": 80,
+    "baseActivitiesPrice": 130,
+    "averageTemperature": 17,
+    "latitude": 41.1579,
+    "longitude": -8.6291,
+    "tags": [
+      "Vin",
+      "Ville",
+      "Canaux"
+    ]
+  },
+  {
+    "key": "faro-portugal",
+    "country": "Portugal",
+    "city": "Faro",
+    "region": "Europe",
+    "climate": "Hot",
+    "baseFlightPrice": 110,
+    "baseHotelPricePerNight": 90,
+    "baseActivitiesPrice": 125,
+    "averageTemperature": 21,
+    "latitude": 37.0194,
+    "longitude": -7.9304,
+    "tags": [
+      "Plage",
+      "Soleil",
+      "Détente"
+    ]
+  },
+  {
+    "key": "marrakech-maroc",
+    "country": "Maroc",
+    "city": "Marrakech",
+    "region": "Afrique",
+    "climate": "Hot",
+    "baseFlightPrice": 180,
+    "baseHotelPricePerNight": 45,
+    "baseActivitiesPrice": 120,
+    "averageTemperature": 30,
+    "latitude": 31.6295,
+    "longitude": -7.9811,
+    "tags": [
+      "Souks",
+      "Soleil",
+      "Dépaysement"
+    ]
+  },
+  {
+    "key": "fes-maroc",
+    "country": "Maroc",
+    "city": "Fès",
+    "region": "Afrique",
+    "climate": "Hot",
+    "baseFlightPrice": 175,
+    "baseHotelPricePerNight": 40,
+    "baseActivitiesPrice": 110,
+    "averageTemperature": 27,
+    "latitude": 34.0331,
+    "longitude": -5.0003,
+    "tags": [
+      "Médina",
+      "Culture",
+      "Artisanat"
+    ]
+  },
+  {
+    "key": "casablanca-maroc",
+    "country": "Maroc",
+    "city": "Casablanca",
+    "region": "Afrique",
+    "climate": "Mild",
+    "baseFlightPrice": 170,
+    "baseHotelPricePerNight": 60,
+    "baseActivitiesPrice": 115,
+    "averageTemperature": 24,
+    "latitude": 33.5731,
+    "longitude": -7.5898,
+    "tags": [
+      "Ville",
+      "Océan",
+      "Business"
+    ]
+  },
+  {
+    "key": "tunis-tunisie",
+    "country": "Tunisie",
+    "city": "Tunis",
+    "region": "Afrique",
+    "climate": "Hot",
+    "baseFlightPrice": 160,
+    "baseHotelPricePerNight": 50,
+    "baseActivitiesPrice": 110,
+    "averageTemperature": 26,
+    "latitude": 36.8065,
+    "longitude": 10.1815,
+    "tags": [
+      "Médina",
+      "Mer",
+      "Culture"
+    ]
+  },
+  {
+    "key": "djerba-tunisie",
+    "country": "Tunisie",
+    "city": "Djerba",
+    "region": "Afrique",
+    "climate": "Hot",
+    "baseFlightPrice": 170,
+    "baseHotelPricePerNight": 65,
+    "baseActivitiesPrice": 120,
+    "averageTemperature": 27,
+    "latitude": 33.8076,
+    "longitude": 10.8451,
+    "tags": [
+      "Île",
+      "Plage",
+      "Détente"
+    ]
+  },
+  {
+    "key": "caire-egypte",
+    "country": "Égypte",
+    "city": "Le Caire",
+    "region": "Afrique",
+    "climate": "Hot",
+    "baseFlightPrice": 220,
+    "baseHotelPricePerNight": 55,
+    "baseActivitiesPrice": 150,
+    "averageTemperature": 29,
+    "latitude": 30.0444,
+    "longitude": 31.2357,
+    "tags": [
+      "Pyramides",
+      "Histoire",
+      "Ville"
+    ]
+  },
+  {
+    "key": "sharm-egypte",
+    "country": "Égypte",
+    "city": "Sharm El-Sheikh",
+    "region": "Afrique",
+    "climate": "Hot",
+    "baseFlightPrice": 240,
+    "baseHotelPricePerNight": 75,
+    "baseActivitiesPrice": 160,
+    "averageTemperature": 30,
+    "latitude": 27.9158,
+    "longitude": 34.3299,
+    "tags": [
+      "Plongée",
+      "Resort",
+      "Mer Rouge"
+    ]
+  },
+  {
+    "key": "cape-town-afsud",
+    "country": "Afrique du Sud",
+    "city": "Le Cap",
+    "region": "Afrique",
+    "climate": "Mild",
+    "baseFlightPrice": 520,
+    "baseHotelPricePerNight": 95,
+    "baseActivitiesPrice": 180,
+    "averageTemperature": 20,
+    "latitude": -33.9249,
+    "longitude": 18.4241,
+    "tags": [
+      "Océan",
+      "Nature",
+      "City Trip"
+    ]
+  },
+  {
+    "key": "johannesburg-afsud",
+    "country": "Afrique du Sud",
+    "city": "Johannesburg",
+    "region": "Afrique",
+    "climate": "Mild",
+    "baseFlightPrice": 500,
+    "baseHotelPricePerNight": 80,
+    "baseActivitiesPrice": 160,
+    "averageTemperature": 18,
+    "latitude": -26.2041,
+    "longitude": 28.0473,
+    "tags": [
+      "Ville",
+      "Culture",
+      "Safari"
+    ]
+  },
+  {
+    "key": "zanzibar-tanzanie",
+    "country": "Tanzanie",
+    "city": "Zanzibar",
+    "region": "Afrique",
+    "climate": "Hot",
+    "baseFlightPrice": 480,
+    "baseHotelPricePerNight": 85,
+    "baseActivitiesPrice": 170,
+    "averageTemperature": 29,
+    "latitude": -6.1659,
+    "longitude": 39.2026,
+    "tags": [
+      "Plage",
+      "Île",
+      "Tropical"
+    ]
+  },
+  {
+    "key": "nairobi-kenya",
+    "country": "Kenya",
+    "city": "Nairobi",
+    "region": "Afrique",
+    "climate": "Mild",
+    "baseFlightPrice": 430,
+    "baseHotelPricePerNight": 70,
+    "baseActivitiesPrice": 180,
+    "averageTemperature": 19,
+    "latitude": -1.2921,
+    "longitude": 36.8219,
+    "tags": [
+      "Safari",
+      "Ville",
+      "Nature"
+    ]
+  },
+  {
+    "key": "dakar-senegal",
+    "country": "Sénégal",
+    "city": "Dakar",
+    "region": "Afrique",
+    "climate": "Hot",
+    "baseFlightPrice": 290,
+    "baseHotelPricePerNight": 65,
+    "baseActivitiesPrice": 130,
+    "averageTemperature": 27,
+    "latitude": 14.7167,
+    "longitude": -17.4677,
+    "tags": [
+      "Océan",
+      "Culture",
+      "Soleil"
+    ]
+  },
+  {
+    "key": "tokyo-japon",
+    "country": "Japon",
+    "city": "Tokyo",
+    "region": "Asie",
+    "climate": "Mild",
+    "baseFlightPrice": 700,
+    "baseHotelPricePerNight": 110,
+    "baseActivitiesPrice": 220,
+    "averageTemperature": 17,
+    "latitude": 35.6762,
+    "longitude": 139.6503,
+    "tags": [
+      "Tech",
+      "Food",
+      "Culture"
+    ]
+  },
+  {
+    "key": "kyoto-japon",
+    "country": "Japon",
+    "city": "Kyoto",
+    "region": "Asie",
+    "climate": "Mild",
+    "baseFlightPrice": 690,
+    "baseHotelPricePerNight": 95,
+    "baseActivitiesPrice": 200,
+    "averageTemperature": 18,
+    "latitude": 35.0116,
+    "longitude": 135.7681,
+    "tags": [
+      "Temples",
+      "Culture",
+      "Zen"
+    ]
+  },
+  {
+    "key": "osaka-japon",
+    "country": "Japon",
+    "city": "Osaka",
+    "region": "Asie",
+    "climate": "Mild",
+    "baseFlightPrice": 680,
+    "baseHotelPricePerNight": 90,
+    "baseActivitiesPrice": 195,
+    "averageTemperature": 19,
+    "latitude": 34.6937,
+    "longitude": 135.5023,
+    "tags": [
+      "Food",
+      "Ville",
+      "Nightlife"
+    ]
+  },
+  {
+    "key": "seoul-coree",
+    "country": "Corée du Sud",
+    "city": "Séoul",
+    "region": "Asie",
+    "climate": "Mild",
+    "baseFlightPrice": 650,
+    "baseHotelPricePerNight": 95,
+    "baseActivitiesPrice": 190,
+    "averageTemperature": 16,
+    "latitude": 37.5665,
+    "longitude": 126.978,
+    "tags": [
+      "Tech",
+      "Food",
+      "Shopping"
+    ]
+  },
+  {
+    "key": "busan-coree",
+    "country": "Corée du Sud",
+    "city": "Busan",
+    "region": "Asie",
+    "climate": "Mild",
+    "baseFlightPrice": 660,
+    "baseHotelPricePerNight": 85,
+    "baseActivitiesPrice": 175,
+    "averageTemperature": 17,
+    "latitude": 35.1796,
+    "longitude": 129.0756,
+    "tags": [
+      "Plage",
+      "Ville",
+      "Food"
+    ]
+  },
+  {
+    "key": "bangkok-thailande",
+    "country": "Thaïlande",
+    "city": "Bangkok",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 520,
+    "baseHotelPricePerNight": 45,
+    "baseActivitiesPrice": 140,
+    "averageTemperature": 31,
+    "latitude": 13.7563,
+    "longitude": 100.5018,
+    "tags": [
+      "Food",
+      "Temples",
+      "Nightlife"
+    ]
+  },
+  {
+    "key": "chiangmai-thailande",
+    "country": "Thaïlande",
+    "city": "Chiang Mai",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 530,
+    "baseHotelPricePerNight": 35,
+    "baseActivitiesPrice": 130,
+    "averageTemperature": 28,
+    "latitude": 18.7883,
+    "longitude": 98.9853,
+    "tags": [
+      "Nature",
+      "Temples",
+      "Budget"
+    ]
+  },
+  {
+    "key": "phuket-thailande",
+    "country": "Thaïlande",
+    "city": "Phuket",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 540,
+    "baseHotelPricePerNight": 60,
+    "baseActivitiesPrice": 145,
+    "averageTemperature": 30,
+    "latitude": 7.8804,
+    "longitude": 98.3923,
+    "tags": [
+      "Plage",
+      "Île",
+      "Soleil"
+    ]
+  },
+  {
+    "key": "hanoi-vietnam",
+    "country": "Vietnam",
+    "city": "Hanoï",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 560,
+    "baseHotelPricePerNight": 40,
+    "baseActivitiesPrice": 135,
+    "averageTemperature": 27,
+    "latitude": 21.0278,
+    "longitude": 105.8342,
+    "tags": [
+      "Culture",
+      "Food",
+      "Ville"
+    ]
+  },
+  {
+    "key": "hochiminh-vietnam",
+    "country": "Vietnam",
+    "city": "Hô Chi Minh-Ville",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 570,
+    "baseHotelPricePerNight": 45,
+    "baseActivitiesPrice": 140,
+    "averageTemperature": 29,
+    "latitude": 10.8231,
+    "longitude": 106.6297,
+    "tags": [
+      "Ville",
+      "Food",
+      "Culture"
+    ]
+  },
+  {
+    "key": "danang-vietnam",
+    "country": "Vietnam",
+    "city": "Da Nang",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 575,
+    "baseHotelPricePerNight": 50,
+    "baseActivitiesPrice": 135,
+    "averageTemperature": 28,
+    "latitude": 16.0544,
+    "longitude": 108.2022,
+    "tags": [
+      "Plage",
+      "Ville",
+      "Ponts"
+    ]
+  },
+  {
+    "key": "singapour-singapour",
+    "country": "Singapour",
+    "city": "Singapour",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 610,
+    "baseHotelPricePerNight": 135,
+    "baseActivitiesPrice": 190,
+    "averageTemperature": 29,
+    "latitude": 1.3521,
+    "longitude": 103.8198,
+    "tags": [
+      "Luxe",
+      "Ville",
+      "Food"
+    ]
+  },
+  {
+    "key": "kualalumpur-malaisie",
+    "country": "Malaisie",
+    "city": "Kuala Lumpur",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 580,
+    "baseHotelPricePerNight": 55,
+    "baseActivitiesPrice": 145,
+    "averageTemperature": 28,
+    "latitude": 3.139,
+    "longitude": 101.6869,
+    "tags": [
+      "Tours",
+      "Food",
+      "Shopping"
+    ]
+  },
+  {
+    "key": "penang-malaisie",
+    "country": "Malaisie",
+    "city": "George Town",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 590,
+    "baseHotelPricePerNight": 50,
+    "baseActivitiesPrice": 140,
+    "averageTemperature": 29,
+    "latitude": 5.4141,
+    "longitude": 100.3288,
+    "tags": [
+      "Street Food",
+      "Culture",
+      "Île"
+    ]
+  },
+  {
+    "key": "bali-indonesie",
+    "country": "Indonésie",
+    "city": "Ubud",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 720,
+    "baseHotelPricePerNight": 40,
+    "baseActivitiesPrice": 160,
+    "averageTemperature": 31,
+    "latitude": -8.5069,
+    "longitude": 115.2625,
+    "tags": [
+      "Yoga",
+      "Nature",
+      "Tropical"
+    ]
+  },
+  {
+    "key": "jakarta-indonesie",
+    "country": "Indonésie",
+    "city": "Jakarta",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 690,
+    "baseHotelPricePerNight": 55,
+    "baseActivitiesPrice": 140,
+    "averageTemperature": 30,
+    "latitude": -6.2088,
+    "longitude": 106.8456,
+    "tags": [
+      "Ville",
+      "Business",
+      "Food"
+    ]
+  },
+  {
+    "key": "manille-philippines",
+    "country": "Philippines",
+    "city": "Manille",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 640,
+    "baseHotelPricePerNight": 55,
+    "baseActivitiesPrice": 150,
+    "averageTemperature": 30,
+    "latitude": 14.5995,
+    "longitude": 120.9842,
+    "tags": [
+      "Ville",
+      "Îles",
+      "Food"
+    ]
+  },
+  {
+    "key": "cebu-philippines",
+    "country": "Philippines",
+    "city": "Cebu",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 650,
+    "baseHotelPricePerNight": 50,
+    "baseActivitiesPrice": 155,
+    "averageTemperature": 29,
+    "latitude": 10.3157,
+    "longitude": 123.8854,
+    "tags": [
+      "Plongée",
+      "Îles",
+      "Plage"
+    ]
+  },
+  {
+    "key": "male-maldives",
+    "country": "Maldives",
+    "city": "Malé",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 780,
+    "baseHotelPricePerNight": 190,
+    "baseActivitiesPrice": 220,
+    "averageTemperature": 30,
+    "latitude": 4.1755,
+    "longitude": 73.5093,
+    "tags": [
+      "Luxe",
+      "Plage",
+      "Îles"
+    ]
+  },
+  {
+    "key": "colombo-srilanka",
+    "country": "Sri Lanka",
+    "city": "Colombo",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 610,
+    "baseHotelPricePerNight": 55,
+    "baseActivitiesPrice": 145,
+    "averageTemperature": 29,
+    "latitude": 6.9271,
+    "longitude": 79.8612,
+    "tags": [
+      "Culture",
+      "Océan",
+      "Tropical"
+    ]
+  },
+  {
+    "key": "kathmandu-nepal",
+    "country": "Népal",
+    "city": "Katmandou",
+    "region": "Asie",
+    "climate": "Mild",
+    "baseFlightPrice": 590,
+    "baseHotelPricePerNight": 35,
+    "baseActivitiesPrice": 140,
+    "averageTemperature": 18,
+    "latitude": 27.7172,
+    "longitude": 85.324,
+    "tags": [
+      "Montagne",
+      "Culture",
+      "Trek"
+    ]
+  },
+  {
+    "key": "dubae-eau",
+    "country": "Émirats arabes unis",
+    "city": "Dubaï",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 420,
+    "baseHotelPricePerNight": 140,
+    "baseActivitiesPrice": 200,
+    "averageTemperature": 33,
+    "latitude": 25.2048,
+    "longitude": 55.2708,
+    "tags": [
+      "Luxe",
+      "Shopping",
+      "Désert"
+    ]
+  },
+  {
+    "key": "abudhabi-eau",
+    "country": "Émirats arabes unis",
+    "city": "Abu Dhabi",
+    "region": "Asie",
+    "climate": "Hot",
+    "baseFlightPrice": 430,
+    "baseHotelPricePerNight": 135,
+    "baseActivitiesPrice": 190,
+    "averageTemperature": 32,
+    "latitude": 24.4539,
+    "longitude": 54.3773,
+    "tags": [
+      "Luxe",
+      "Plage",
+      "Ville"
+    ]
+  },
+  {
+    "key": "newyork-usa",
+    "country": "États-Unis",
+    "city": "New York",
+    "region": "Amériques",
+    "climate": "Mild",
+    "baseFlightPrice": 500,
+    "baseHotelPricePerNight": 130,
+    "baseActivitiesPrice": 260,
+    "averageTemperature": 20,
+    "latitude": 40.7128,
+    "longitude": -74.006,
+    "tags": [
+      "City Trip",
+      "Shopping",
+      "Skyline"
+    ]
+  },
+  {
+    "key": "losangeles-usa",
+    "country": "États-Unis",
+    "city": "Los Angeles",
+    "region": "Amériques",
+    "climate": "Hot",
+    "baseFlightPrice": 540,
+    "baseHotelPricePerNight": 120,
+    "baseActivitiesPrice": 230,
+    "averageTemperature": 24,
+    "latitude": 34.0522,
+    "longitude": -118.2437,
+    "tags": [
+      "Cinéma",
+      "Plage",
+      "Road Trip"
+    ]
+  },
+  {
+    "key": "miami-usa",
+    "country": "États-Unis",
+    "city": "Miami",
+    "region": "Amériques",
+    "climate": "Hot",
+    "baseFlightPrice": 520,
+    "baseHotelPricePerNight": 125,
+    "baseActivitiesPrice": 220,
+    "averageTemperature": 28,
+    "latitude": 25.7617,
+    "longitude": -80.1918,
+    "tags": [
+      "Plage",
+      "Nightlife",
+      "Soleil"
+    ]
+  },
+  {
+    "key": "sanfrancisco-usa",
+    "country": "États-Unis",
+    "city": "San Francisco",
+    "region": "Amériques",
+    "climate": "Mild",
+    "baseFlightPrice": 530,
+    "baseHotelPricePerNight": 145,
+    "baseActivitiesPrice": 230,
+    "averageTemperature": 17,
+    "latitude": 37.7749,
+    "longitude": -122.4194,
+    "tags": [
+      "Pont",
+      "Tech",
+      "Ville"
+    ]
+  },
+  {
+    "key": "lasvegas-usa",
+    "country": "États-Unis",
+    "city": "Las Vegas",
+    "region": "Amériques",
+    "climate": "Hot",
+    "baseFlightPrice": 510,
+    "baseHotelPricePerNight": 90,
+    "baseActivitiesPrice": 240,
+    "averageTemperature": 27,
+    "latitude": 36.1699,
+    "longitude": -115.1398,
+    "tags": [
+      "Casino",
+      "Nightlife",
+      "Désert"
+    ]
+  },
+  {
+    "key": "montreal-canada",
+    "country": "Canada",
+    "city": "Montréal",
+    "region": "Amériques",
+    "climate": "Cold",
+    "baseFlightPrice": 450,
+    "baseHotelPricePerNight": 100,
+    "baseActivitiesPrice": 180,
+    "averageTemperature": 8,
+    "latitude": 45.5017,
+    "longitude": -73.5673,
+    "tags": [
+      "Culture",
+      "Ville",
+      "Food"
+    ]
+  },
+  {
+    "key": "quebec-canada",
+    "country": "Canada",
+    "city": "Québec",
+    "region": "Amériques",
+    "climate": "Cold",
+    "baseFlightPrice": 460,
+    "baseHotelPricePerNight": 95,
+    "baseActivitiesPrice": 170,
+    "averageTemperature": 6,
+    "latitude": 46.8139,
+    "longitude": -71.208,
+    "tags": [
+      "Hiver",
+      "Vieille Ville",
+      "Culture"
+    ]
+  },
+  {
+    "key": "toronto-canada",
+    "country": "Canada",
+    "city": "Toronto",
+    "region": "Amériques",
+    "climate": "Cold",
+    "baseFlightPrice": 470,
+    "baseHotelPricePerNight": 115,
+    "baseActivitiesPrice": 175,
+    "averageTemperature": 9,
+    "latitude": 43.6532,
+    "longitude": -79.3832,
+    "tags": [
+      "Ville",
+      "Skyline",
+      "Culture"
+    ]
+  },
+  {
+    "key": "vancouver-canada",
+    "country": "Canada",
+    "city": "Vancouver",
+    "region": "Amériques",
+    "climate": "Mild",
+    "baseFlightPrice": 520,
+    "baseHotelPricePerNight": 125,
+    "baseActivitiesPrice": 185,
+    "averageTemperature": 11,
+    "latitude": 49.2827,
+    "longitude": -123.1207,
+    "tags": [
+      "Nature",
+      "Ville",
+      "Océan"
+    ]
+  },
+  {
+    "key": "mexicocity-mexique",
+    "country": "Mexique",
+    "city": "Mexico",
+    "region": "Amériques",
+    "climate": "Mild",
+    "baseFlightPrice": 430,
+    "baseHotelPricePerNight": 70,
+    "baseActivitiesPrice": 150,
+    "averageTemperature": 19,
+    "latitude": 19.4326,
+    "longitude": -99.1332,
+    "tags": [
+      "Culture",
+      "Food",
+      "Ville"
+    ]
+  },
+  {
+    "key": "cancun-mexique",
+    "country": "Mexique",
+    "city": "Cancún",
+    "region": "Amériques",
+    "climate": "Hot",
+    "baseFlightPrice": 450,
+    "baseHotelPricePerNight": 95,
+    "baseActivitiesPrice": 165,
+    "averageTemperature": 28,
+    "latitude": 21.1619,
+    "longitude": -86.8515,
+    "tags": [
+      "Plage",
+      "Resort",
+      "Soleil"
+    ]
+  },
+  {
+    "key": "riobresil",
+    "country": "Brésil",
+    "city": "Rio de Janeiro",
+    "region": "Amériques",
+    "climate": "Hot",
+    "baseFlightPrice": 620,
+    "baseHotelPricePerNight": 85,
+    "baseActivitiesPrice": 180,
+    "averageTemperature": 27,
+    "latitude": -22.9068,
+    "longitude": -43.1729,
+    "tags": [
+      "Plage",
+      "Fête",
+      "Vue"
+    ]
+  },
+  {
+    "key": "saopaulo-bresil",
+    "country": "Brésil",
+    "city": "São Paulo",
+    "region": "Amériques",
+    "climate": "Mild",
+    "baseFlightPrice": 610,
+    "baseHotelPricePerNight": 80,
+    "baseActivitiesPrice": 170,
+    "averageTemperature": 22,
+    "latitude": -23.5558,
+    "longitude": -46.6396,
+    "tags": [
+      "Ville",
+      "Food",
+      "Culture"
+    ]
+  },
+  {
+    "key": "buenosaires-argentine",
+    "country": "Argentine",
+    "city": "Buenos Aires",
+    "region": "Amériques",
+    "climate": "Mild",
+    "baseFlightPrice": 650,
+    "baseHotelPricePerNight": 75,
+    "baseActivitiesPrice": 165,
+    "averageTemperature": 19,
+    "latitude": -34.6037,
+    "longitude": -58.3816,
+    "tags": [
+      "Tango",
+      "Culture",
+      "Ville"
+    ]
+  },
+  {
+    "key": "santiago-chili",
+    "country": "Chili",
+    "city": "Santiago",
+    "region": "Amériques",
+    "climate": "Mild",
+    "baseFlightPrice": 670,
+    "baseHotelPricePerNight": 80,
+    "baseActivitiesPrice": 170,
+    "averageTemperature": 17,
+    "latitude": -33.4489,
+    "longitude": -70.6693,
+    "tags": [
+      "Montagne",
+      "Ville",
+      "Vin"
+    ]
+  },
+  {
+    "key": "lima-perou",
+    "country": "Pérou",
+    "city": "Lima",
+    "region": "Amériques",
+    "climate": "Mild",
+    "baseFlightPrice": 640,
+    "baseHotelPricePerNight": 70,
+    "baseActivitiesPrice": 160,
+    "averageTemperature": 20,
+    "latitude": -12.0464,
+    "longitude": -77.0428,
+    "tags": [
+      "Food",
+      "Océan",
+      "Culture"
+    ]
+  },
+  {
+    "key": "cusco-perou",
+    "country": "Pérou",
+    "city": "Cusco",
+    "region": "Amériques",
+    "climate": "Mild",
+    "baseFlightPrice": 660,
+    "baseHotelPricePerNight": 65,
+    "baseActivitiesPrice": 180,
+    "averageTemperature": 13,
+    "latitude": -13.5319,
+    "longitude": -71.9675,
+    "tags": [
+      "Inca",
+      "Montagne",
+      "Culture"
+    ]
+  },
+  {
+    "key": "bogota-colombie",
+    "country": "Colombie",
+    "city": "Bogotá",
+    "region": "Amériques",
+    "climate": "Mild",
+    "baseFlightPrice": 580,
+    "baseHotelPricePerNight": 60,
+    "baseActivitiesPrice": 150,
+    "averageTemperature": 14,
+    "latitude": 4.711,
+    "longitude": -74.0721,
+    "tags": [
+      "Ville",
+      "Culture",
+      "Altitude"
+    ]
+  },
+  {
+    "key": "cartagena-colombie",
+    "country": "Colombie",
+    "city": "Carthagène",
+    "region": "Amériques",
+    "climate": "Hot",
+    "baseFlightPrice": 590,
+    "baseHotelPricePerNight": 85,
+    "baseActivitiesPrice": 160,
+    "averageTemperature": 29,
+    "latitude": 10.391,
+    "longitude": -75.4794,
+    "tags": [
+      "Caraïbes",
+      "Vieille Ville",
+      "Plage"
+    ]
+  },
+  {
+    "key": "havana-cuba",
+    "country": "Cuba",
+    "city": "La Havane",
+    "region": "Amériques",
+    "climate": "Hot",
+    "baseFlightPrice": 560,
+    "baseHotelPricePerNight": 70,
+    "baseActivitiesPrice": 150,
+    "averageTemperature": 27,
+    "latitude": 23.1136,
+    "longitude": -82.3666,
+    "tags": [
+      "Old Cars",
+      "Culture",
+      "Soleil"
+    ]
+  },
+  {
+    "key": "punta-cana-rd",
+    "country": "République dominicaine",
+    "city": "Punta Cana",
+    "region": "Amériques",
+    "climate": "Hot",
+    "baseFlightPrice": 590,
+    "baseHotelPricePerNight": 100,
+    "baseActivitiesPrice": 165,
+    "averageTemperature": 29,
+    "latitude": 18.5601,
+    "longitude": -68.3725,
+    "tags": [
+      "Resort",
+      "Plage",
+      "Soleil"
+    ]
+  },
+  {
+    "key": "sanjose-costarica",
+    "country": "Costa Rica",
+    "city": "San José",
+    "region": "Amériques",
+    "climate": "Hot",
+    "baseFlightPrice": 600,
+    "baseHotelPricePerNight": 70,
+    "baseActivitiesPrice": 170,
+    "averageTemperature": 24,
+    "latitude": 9.9281,
+    "longitude": -84.0907,
+    "tags": [
+      "Nature",
+      "Aventure",
+      "Forêt"
+    ]
+  },
+  {
+    "key": "panamacity-panama",
+    "country": "Panama",
+    "city": "Panama City",
+    "region": "Amériques",
+    "climate": "Hot",
+    "baseFlightPrice": 610,
+    "baseHotelPricePerNight": 85,
+    "baseActivitiesPrice": 165,
+    "averageTemperature": 28,
+    "latitude": 8.9824,
+    "longitude": -79.5199,
+    "tags": [
+      "Canal",
+      "Ville",
+      "Tropical"
+    ]
+  },
+  {
+    "key": "sydney-australie",
+    "country": "Australie",
+    "city": "Sydney",
+    "region": "Océanie",
+    "climate": "Hot",
+    "baseFlightPrice": 950,
+    "baseHotelPricePerNight": 120,
+    "baseActivitiesPrice": 230,
+    "averageTemperature": 26,
+    "latitude": -33.8688,
+    "longitude": 151.2093,
+    "tags": [
+      "Océan",
+      "Ville",
+      "Plages"
+    ]
+  },
+  {
+    "key": "melbourne-australie",
+    "country": "Australie",
+    "city": "Melbourne",
+    "region": "Océanie",
+    "climate": "Mild",
+    "baseFlightPrice": 930,
+    "baseHotelPricePerNight": 110,
+    "baseActivitiesPrice": 220,
+    "averageTemperature": 19,
+    "latitude": -37.8136,
+    "longitude": 144.9631,
+    "tags": [
+      "Culture",
+      "Café",
+      "Ville"
+    ]
+  },
+  {
+    "key": "brisbane-australie",
+    "country": "Australie",
+    "city": "Brisbane",
+    "region": "Océanie",
+    "climate": "Hot",
+    "baseFlightPrice": 920,
+    "baseHotelPricePerNight": 105,
+    "baseActivitiesPrice": 210,
+    "averageTemperature": 24,
+    "latitude": -27.4698,
+    "longitude": 153.0251,
+    "tags": [
+      "Soleil",
+      "Ville",
+      "Nature"
+    ]
+  },
+  {
+    "key": "perth-australie",
+    "country": "Australie",
+    "city": "Perth",
+    "region": "Océanie",
+    "climate": "Hot",
+    "baseFlightPrice": 980,
+    "baseHotelPricePerNight": 100,
+    "baseActivitiesPrice": 215,
+    "averageTemperature": 23,
+    "latitude": -31.9505,
+    "longitude": 115.8605,
+    "tags": [
+      "Océan",
+      "Soleil",
+      "Détente"
+    ]
+  },
+  {
+    "key": "auckland-nz",
+    "country": "Nouvelle-Zélande",
+    "city": "Auckland",
+    "region": "Océanie",
+    "climate": "Mild",
+    "baseFlightPrice": 1040,
+    "baseHotelPricePerNight": 115,
+    "baseActivitiesPrice": 220,
+    "averageTemperature": 16,
+    "latitude": -36.8509,
+    "longitude": 174.7645,
+    "tags": [
+      "Nature",
+      "Ville",
+      "Océan"
+    ]
+  },
+  {
+    "key": "queenstown-nz",
+    "country": "Nouvelle-Zélande",
+    "city": "Queenstown",
+    "region": "Océanie",
+    "climate": "Cold",
+    "baseFlightPrice": 1080,
+    "baseHotelPricePerNight": 125,
+    "baseActivitiesPrice": 240,
+    "averageTemperature": 10,
+    "latitude": -45.0312,
+    "longitude": 168.6626,
+    "tags": [
+      "Aventure",
+      "Montagne",
+      "Lac"
+    ]
+  }
 ]

@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using TripTailorSimple.WPF.Models;
+using TripTailorSimple.WPF.Modeles;
 using TripTailorSimple.WPF.Services;
 
 namespace TripTailorSimple.WPF.Views
@@ -20,10 +21,14 @@ namespace TripTailorSimple.WPF.Views
         private readonly ServicePays _servicePays;
         private readonly ServiceSuggestionsVoyage _serviceSuggestionsVoyage;
         private readonly ServiceRechercheVoyage _serviceRechercheVoyage;
+        private readonly ServiceRechercheLibre _serviceRechercheLibre;
         private readonly ServiceNavigateur _serviceNavigateur;
+
+        private readonly HashSet<string> _regionsSelectionnees = new(StringComparer.OrdinalIgnoreCase);
 
         private List<PropositionVoyage> _resultatsActuels = new();
         private PropositionVoyage? _voyageActuel;
+        private string _styleSelectionne = "Confort";
 
         public MainWindow()
         {
@@ -46,53 +51,66 @@ namespace TripTailorSimple.WPF.Views
                 _servicePays,
                 _serviceSuggestionsVoyage);
 
+            _serviceRechercheLibre = new ServiceRechercheLibre(
+                _httpClient,
+                _serviceMeteo,
+                _serviceWikipedia,
+                _servicePays,
+                _serviceSuggestionsVoyage);
+
             MettreAJourBudget();
-            AfficherRecherche();
+            MettreAJourStyleActif();
+            MettreAJourNavActif(BtnNavAccueil);
+            AfficherAccueil();
         }
 
         #region Navigation
 
-        private void AfficherRecherche()
+        private void AfficherAccueil()
         {
-            SectionRecherche.Visibility = Visibility.Visible;
+            SectionAccueil.Visibility = Visibility.Visible;
             SectionResultats.Visibility = Visibility.Collapsed;
             SectionDetail.Visibility = Visibility.Collapsed;
-
-            TxtTitreSection.Text = "Recherche";
-            TxtSousTitreSection.Text = "Définis ton voyage idéal";
-            TxtResumeEtat.Text = "Choisis tes critères puis lance la recherche.";
+            MettreAJourNavActif(BtnNavAccueil);
         }
 
         private void AfficherResultats()
         {
-            SectionRecherche.Visibility = Visibility.Collapsed;
+            SectionAccueil.Visibility = Visibility.Collapsed;
             SectionResultats.Visibility = Visibility.Visible;
             SectionDetail.Visibility = Visibility.Collapsed;
-
-            TxtTitreSection.Text = "Résultats";
-            TxtSousTitreSection.Text = "Destinations proposées";
-            TxtResumeEtat.Text = $"{_resultatsActuels.Count} proposition(s) trouvée(s).";
+            MettreAJourNavActif(BtnNavDestinations);
         }
 
         private void AfficherDetail()
         {
-            SectionRecherche.Visibility = Visibility.Collapsed;
+            SectionAccueil.Visibility = Visibility.Collapsed;
             SectionResultats.Visibility = Visibility.Collapsed;
             SectionDetail.Visibility = Visibility.Visible;
-
-            TxtTitreSection.Text = "Détail du voyage";
-            TxtSousTitreSection.Text = "Vue complète de la destination";
-            TxtResumeEtat.Text = _voyageActuel == null
-                ? "Aucun voyage sélectionné."
-                : $"{_voyageActuel.Ville}, {_voyageActuel.Pays}";
+            MettreAJourNavActif(BtnNavDestinations);
         }
 
-        private void BtnMenuRecherche_Click(object sender, RoutedEventArgs e)
+        private void MettreAJourNavActif(Button actif)
         {
-            AfficherRecherche();
+            ReinitialiserNav(BtnNavAccueil);
+            ReinitialiserNav(BtnNavDestinations);
+
+            actif.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EEF8FD"));
+            actif.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#44B3E8"));
         }
 
-        private void BtnMenuResultats_Click(object sender, RoutedEventArgs e)
+        private void ReinitialiserNav(Button btn)
+        {
+            btn.Background = Brushes.Transparent;
+            btn.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6F7A86"));
+        }
+
+        private void BtnNavAccueil_Click(object sender, RoutedEventArgs e)
+        {
+            AfficherAccueil();
+        }
+
+        private void BtnNavDestinations_Click(object sender, RoutedEventArgs e)
         {
             if (_resultatsActuels.Count == 0)
             {
@@ -103,24 +121,19 @@ namespace TripTailorSimple.WPF.Views
             AfficherResultats();
         }
 
-        private void BtnMenuDetail_Click(object sender, RoutedEventArgs e)
+        private void BtnRetourAccueil_Click(object sender, RoutedEventArgs e)
         {
-            if (_voyageActuel == null)
-            {
-                MessageBox.Show("Sélectionne d'abord un voyage.", "TripTailor", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-
-            AfficherDetail();
-        }
-
-        private void BtnRetourRecherche_Click(object sender, RoutedEventArgs e)
-        {
-            AfficherRecherche();
+            AfficherAccueil();
         }
 
         private void BtnRetourResultats_Click(object sender, RoutedEventArgs e)
         {
+            if (_resultatsActuels.Count == 0)
+            {
+                AfficherAccueil();
+                return;
+            }
+
             AfficherResultats();
         }
 
@@ -128,8 +141,10 @@ namespace TripTailorSimple.WPF.Views
         {
             try
             {
-                var fenetreChat = new ChatWindow();
-                fenetreChat.Owner = this;
+                var fenetreChat = new ChatWindow
+                {
+                    Owner = this
+                };
                 fenetreChat.Show();
             }
             catch (Exception ex)
@@ -150,12 +165,68 @@ namespace TripTailorSimple.WPF.Views
                 BtnRechercher.Content = "Recherche...";
 
                 var critere = LireCritereRecherche();
+                var texteLibre = TxtRechercheLibre.Text?.Trim() ?? string.Empty;
 
-                _resultatsActuels = await _serviceRechercheVoyage.RechercherVoyagesAsync(critere);
+                List<PropositionVoyage> resultats;
+
+                if (!string.IsNullOrWhiteSpace(texteLibre))
+                {
+                    resultats = await RechercherAvecTexteLibreAsync(texteLibre, critere);
+                }
+                else
+                {
+                    resultats = await _serviceRechercheVoyage.RechercherVoyagesAsync(critere);
+                }
+
+                if (ChkVolInclus.IsChecked != true)
+                {
+                    foreach (var item in resultats)
+                    {
+                        item.PrixTotal -= item.PrixVol;
+                        item.PrixVol = 0;
+                    }
+                }
+
+                if (ChkHotelInclus.IsChecked != true)
+                {
+                    foreach (var item in resultats)
+                    {
+                        item.PrixTotal -= item.PrixHotel;
+                        item.PrixHotel = 0;
+                    }
+                }
+
+                if (ChkActivitesPayantes.IsChecked != true)
+                {
+                    foreach (var item in resultats)
+                    {
+                        item.PrixTotal -= item.PrixActivites;
+                        item.PrixActivites = 0;
+                        item.Activites = new List<string>();
+                    }
+                }
+
+                if (ChkIdeesGratuites.IsChecked != true)
+                {
+                    foreach (var item in resultats)
+                    {
+                        item.IdeesGratuites = new List<string>();
+                    }
+                }
+
+                _resultatsActuels = resultats
+                    .OrderBy(x => x.PrixTotal)
+                    .ThenByDescending(x => x.Score)
+                    .ToList();
 
                 ConstruireCartesResultats(_resultatsActuels);
+                TxtNombreResultats.Text = _resultatsActuels.Count switch
+                {
+                    0 => "0 destination trouvée",
+                    1 => "1 destination trouvée",
+                    _ => $"{_resultatsActuels.Count} destinations trouvées"
+                };
 
-                TxtNombreResultats.Text = $"{_resultatsActuels.Count} destination(s) trouvée(s)";
                 AfficherResultats();
             }
             catch (Exception ex)
@@ -165,31 +236,142 @@ namespace TripTailorSimple.WPF.Views
             finally
             {
                 BtnRechercher.IsEnabled = true;
-                BtnRechercher.Content = "Trouver mon voyage";
+                BtnRechercher.Content = "Trouver ma destination";
             }
+        }
+
+        private async System.Threading.Tasks.Task<List<PropositionVoyage>> RechercherAvecTexteLibreAsync(string texteLibre, CritereRecherche critere)
+        {
+            var tout = await _serviceRechercheVoyage.RechercherVoyagesAsync(critere);
+
+            var locaux = tout
+                .Where(x =>
+                    x.Ville.Contains(texteLibre, StringComparison.OrdinalIgnoreCase) ||
+                    x.Pays.Contains(texteLibre, StringComparison.OrdinalIgnoreCase) ||
+                    x.Region.Contains(texteLibre, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            if (locaux.Count > 0)
+                return locaux;
+
+            var rechercheLibre = await _serviceRechercheLibre.RechercherAsync(texteLibre, critere);
+            if (rechercheLibre != null)
+                return new List<PropositionVoyage> { rechercheLibre };
+
+            return new List<PropositionVoyage>();
         }
 
         private CritereRecherche LireCritereRecherche()
         {
             var climat = ((ComboBoxItem)ComboClimat.SelectedItem)?.Content?.ToString() ?? "Tempéré";
-            var styleVoyage = ((ComboBoxItem)ComboStyleVoyage.SelectedItem)?.Content?.ToString() ?? "Confort";
-
-            var regions = new List<string>();
-
-            if (ChkEurope.IsChecked == true) regions.Add("Europe");
-            if (ChkAsie.IsChecked == true) regions.Add("Asie");
-            if (ChkAfrique.IsChecked == true) regions.Add("Afrique");
-            if (ChkAmeriques.IsChecked == true) regions.Add("Amériques");
-            if (ChkOceanie.IsChecked == true) regions.Add("Océanie");
 
             return new CritereRecherche
             {
                 Climat = climat,
-                StyleVoyage = styleVoyage,
+                StyleVoyage = _styleSelectionne,
                 Budget = (int)SliderBudget.Value,
-                NombreJours = int.Parse(TxtNombreJours.Text),
-                Regions = regions
+                NombreJours = LireNombreJours(),
+                Regions = _regionsSelectionnees.ToList()
             };
+        }
+
+        private int LireNombreJours()
+        {
+            return int.TryParse(TxtNombreJours.Text, out int jours)
+                ? Math.Max(2, Math.Min(30, jours))
+                : 7;
+        }
+
+        #endregion
+
+        #region Styles / régions / budget
+
+        private void SliderBudget_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            MettreAJourBudget();
+        }
+
+        private void MettreAJourBudget()
+        {
+            if (TxtBudgetLabel != null)
+            {
+                TxtBudgetLabel.Text = $"Budget total (€) : {(int)SliderBudget.Value} €";
+            }
+        }
+
+        private void BtnMoinsJour_Click(object sender, RoutedEventArgs e)
+        {
+            int jours = LireNombreJours();
+            if (jours > 2)
+                TxtNombreJours.Text = (jours - 1).ToString();
+        }
+
+        private void BtnPlusJour_Click(object sender, RoutedEventArgs e)
+        {
+            int jours = LireNombreJours();
+            if (jours < 30)
+                TxtNombreJours.Text = (jours + 1).ToString();
+        }
+
+        private void BtnStyleEconomique_Click(object sender, RoutedEventArgs e)
+        {
+            _styleSelectionne = "Économique";
+            MettreAJourStyleActif();
+        }
+
+        private void BtnStyleConfort_Click(object sender, RoutedEventArgs e)
+        {
+            _styleSelectionne = "Confort";
+            MettreAJourStyleActif();
+        }
+
+        private void BtnStyleLuxe_Click(object sender, RoutedEventArgs e)
+        {
+            _styleSelectionne = "Luxe";
+            MettreAJourStyleActif();
+        }
+
+        private void MettreAJourStyleActif()
+        {
+            AppliquerStyleBouton(BtnStyleEconomique, _styleSelectionne == "Économique");
+            AppliquerStyleBouton(BtnStyleConfort, _styleSelectionne == "Confort");
+            AppliquerStyleBouton(BtnStyleLuxe, _styleSelectionne == "Luxe");
+        }
+
+        private void AppliquerStyleBouton(Button btn, bool actif)
+        {
+            btn.Background = actif
+                ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EEF8FD"))
+                : Brushes.White;
+
+            btn.BorderBrush = actif
+                ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#56B9E9"))
+                : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E5E2"));
+
+            btn.Foreground = actif
+                ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D98B9"))
+                : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1D2733"));
+        }
+
+        private void BtnRegion_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button btn || btn.Tag is not string region)
+                return;
+
+            if (_regionsSelectionnees.Contains(region))
+            {
+                _regionsSelectionnees.Remove(region);
+                btn.Background = Brushes.White;
+                btn.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E5E2"));
+                btn.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1D2733"));
+            }
+            else
+            {
+                _regionsSelectionnees.Add(region);
+                btn.Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EEF8FD"));
+                btn.BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#56B9E9"));
+                btn.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D98B9"));
+            }
         }
 
         #endregion
@@ -207,10 +389,9 @@ namespace TripTailorSimple.WPF.Views
                     Text = "Aucun résultat pour ces critères.",
                     FontSize = 18,
                     FontWeight = FontWeights.SemiBold,
-                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6B7A76")),
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6F7A86")),
                     Margin = new Thickness(10)
                 });
-
                 return;
             }
 
@@ -218,143 +399,205 @@ namespace TripTailorSimple.WPF.Views
             {
                 var carte = new Border
                 {
-                    Width = 320,
+                    Width = 340,
                     Margin = new Thickness(0, 0, 22, 22),
                     Background = Brushes.White,
                     CornerRadius = new CornerRadius(18),
-                    BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E3EAEA")),
+                    BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E5E2")),
                     BorderThickness = new Thickness(1)
                 };
 
                 var racine = new StackPanel();
 
+                var zoneImage = new Grid
+                {
+                    Height = 190
+                };
+
                 var image = new Image
                 {
-                    Height = 210,
                     Stretch = Stretch.Fill
                 };
                 ChargerImage(image, voyage.UrlImage);
 
-                var conteneurImage = new Border
+                zoneImage.Children.Add(image);
+
+                if (!string.IsNullOrWhiteSpace(voyage.UrlDrapeau))
                 {
-                    CornerRadius = new CornerRadius(18, 18, 0, 0),
-                    Child = image,
-                    ClipToBounds = true
+                    var flag = new Image
+                    {
+                        Width = 24,
+                        Height = 18,
+                        HorizontalAlignment = HorizontalAlignment.Right,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        Margin = new Thickness(0, 10, 10, 0)
+                    };
+                    ChargerImage(flag, voyage.UrlDrapeau);
+                    zoneImage.Children.Add(flag);
+                }
+
+                var bandeau = new StackPanel
+                {
+                    Orientation = Orientation.Horizontal,
+                    HorizontalAlignment = HorizontalAlignment.Left,
+                    VerticalAlignment = VerticalAlignment.Bottom,
+                    Margin = new Thickness(10)
                 };
 
-                racine.Children.Add(conteneurImage);
+                bandeau.Children.Add(new Border
+                {
+                    Background = Brushes.White,
+                    CornerRadius = new CornerRadius(8),
+                    Padding = new Thickness(8, 3, 8, 3),
+                    Margin = new Thickness(0, 0, 8, 0),
+                    Child = new TextBlock
+                    {
+                        Text = RegionVersLabel(voyage.Region),
+                        FontSize = 10,
+                        FontWeight = FontWeights.Bold
+                    }
+                });
+
+                bandeau.Children.Add(new Border
+                {
+                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#56B9E9")),
+                    CornerRadius = new CornerRadius(8),
+                    Padding = new Thickness(8, 3, 8, 3),
+                    Child = new TextBlock
+                    {
+                        Text = voyage.StyleVoyageAffiche,
+                        FontSize = 10,
+                        FontWeight = FontWeights.Bold,
+                        Foreground = Brushes.White
+                    }
+                });
+
+                zoneImage.Children.Add(bandeau);
+
+                var imageBorder = new Border
+                {
+                    CornerRadius = new CornerRadius(18, 18, 0, 0),
+                    ClipToBounds = true,
+                    Child = zoneImage
+                };
+
+                racine.Children.Add(imageBorder);
 
                 var contenu = new StackPanel
                 {
-                    Margin = new Thickness(18)
+                    Margin = new Thickness(16)
                 };
-
-                var grilleTitre = new Grid();
-                grilleTitre.ColumnDefinitions.Add(new ColumnDefinition());
-                grilleTitre.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
-
-                var blocGauche = new StackPanel();
-                blocGauche.Children.Add(new TextBlock
-                {
-                    Text = voyage.Ville,
-                    FontSize = 22,
-                    FontWeight = FontWeights.ExtraBold
-                });
-                blocGauche.Children.Add(new TextBlock
-                {
-                    Text = voyage.Pays,
-                    FontSize = 13,
-                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6B7A76"))
-                });
-
-                var blocDroite = new StackPanel();
-                blocDroite.Children.Add(new TextBlock
-                {
-                    Text = $"{voyage.PrixTotal} €",
-                    FontSize = 20,
-                    FontWeight = FontWeights.Black,
-                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#006B5F")),
-                    HorizontalAlignment = HorizontalAlignment.Right
-                });
-                blocDroite.Children.Add(new TextBlock
-                {
-                    Text = $"{voyage.TemperatureMoyenne:0.#} °C",
-                    FontSize = 12,
-                    FontWeight = FontWeights.SemiBold,
-                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6B7A76")),
-                    HorizontalAlignment = HorizontalAlignment.Right
-                });
-
-                Grid.SetColumn(blocGauche, 0);
-                Grid.SetColumn(blocDroite, 1);
-
-                grilleTitre.Children.Add(blocGauche);
-                grilleTitre.Children.Add(blocDroite);
-
-                contenu.Children.Add(grilleTitre);
-
-                var panelTags = new WrapPanel
-                {
-                    Margin = new Thickness(0, 12, 0, 14)
-                };
-
-                foreach (var tag in voyage.Etiquettes.Take(4))
-                {
-                    panelTags.Children.Add(new Border
-                    {
-                        Margin = new Thickness(0, 0, 8, 8),
-                        Padding = new Thickness(8, 4, 8, 4),
-                        CornerRadius = new CornerRadius(10),
-                        BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#BACAC5")),
-                        BorderThickness = new Thickness(1),
-                        Child = new TextBlock
-                        {
-                            Text = tag,
-                            FontSize = 10,
-                            FontWeight = FontWeights.Bold,
-                            Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6B7A76"))
-                        }
-                    });
-                }
-
-                contenu.Children.Add(panelTags);
 
                 contenu.Children.Add(new TextBlock
                 {
-                    Text = string.IsNullOrWhiteSpace(voyage.Description)
-                        ? "Destination idéale selon tes critères."
-                        : voyage.Description,
-                    TextWrapping = TextWrapping.Wrap,
-                    MaxHeight = 58,
-                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6B7A76"))
+                    Text = voyage.VillePays,
+                    FontSize = 24,
+                    FontWeight = FontWeights.Black,
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1D2733")),
+                    TextWrapping = TextWrapping.Wrap
                 });
 
-                var boutonVoir = new Button
+                var ligneInfo = new StackPanel
                 {
-                    Content = "Voir le voyage",
+                    Orientation = Orientation.Horizontal,
+                    Margin = new Thickness(0, 10, 0, 0)
+                };
+
+                ligneInfo.Children.Add(new TextBlock
+                {
+                    Text = $"☀ {voyage.TemperatureMoyenne:0.#}°C",
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6F7A86")),
+                    Margin = new Thickness(0, 0, 12, 0)
+                });
+
+                ligneInfo.Children.Add(new TextBlock
+                {
+                    Text = $"🗓 {voyage.NombreJours} jours",
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6F7A86"))
+                });
+
+                contenu.Children.Add(ligneInfo);
+
+                var lignePrix = new Grid
+                {
+                    Margin = new Thickness(0, 14, 0, 0)
+                };
+                lignePrix.ColumnDefinitions.Add(new ColumnDefinition());
+                lignePrix.ColumnDefinitions.Add(new ColumnDefinition { Width = GridLength.Auto });
+
+                lignePrix.Children.Add(new TextBlock
+                {
+                    Text = "Prix estimé",
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6F7A86")),
+                    FontSize = 14
+                });
+
+                var prix = new TextBlock
+                {
+                    Text = $"{voyage.PrixTotal} €",
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D98B9")),
+                    FontSize = 30,
+                    FontWeight = FontWeights.Black
+                };
+                Grid.SetColumn(prix, 1);
+                lignePrix.Children.Add(prix);
+
+                contenu.Children.Add(lignePrix);
+
+                var infos = new WrapPanel
+                {
+                    Margin = new Thickness(0, 12, 0, 0)
+                };
+
+                infos.Children.Add(CreerTagInfo("✈ Vol"));
+                infos.Children.Add(CreerTagInfo("🏨 Hôtel"));
+                if (voyage.IdeesGratuites.Count > 0)
+                    infos.Children.Add(CreerTagInfo("🆓 Gratuit"));
+
+                contenu.Children.Add(infos);
+
+                var btnVoir = new Button
+                {
+                    Content = "Explorer",
+                    Height = 40,
                     Margin = new Thickness(0, 16, 0, 0),
-                    Height = 42,
-                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#006B5F")),
+                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#56B9E9")),
                     Foreground = Brushes.White,
                     BorderBrush = Brushes.Transparent,
                     FontWeight = FontWeights.Bold,
                     Cursor = System.Windows.Input.Cursors.Hand,
                     Tag = voyage
                 };
-                boutonVoir.Click += BtnVoirVoyage_Click;
+                btnVoir.Click += BtnVoirVoyage_Click;
 
-                contenu.Children.Add(boutonVoir);
+                contenu.Children.Add(btnVoir);
 
                 racine.Children.Add(contenu);
                 carte.Child = racine;
-
                 PanelResultats.Children.Add(carte);
             }
         }
 
+        private Border CreerTagInfo(string texte)
+        {
+            return new Border
+            {
+                Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F2F7F9")),
+                CornerRadius = new CornerRadius(8),
+                Padding = new Thickness(8, 4, 8, 4),
+                Margin = new Thickness(0, 0, 8, 8),
+                Child = new TextBlock
+                {
+                    Text = texte,
+                    FontSize = 12,
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6F7A86"))
+                }
+            };
+        }
+
         private async void BtnVoirVoyage_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is not Button bouton || bouton.Tag is not PropositionVoyage voyage)
+            if (sender is not Button btn || btn.Tag is not PropositionVoyage voyage)
                 return;
 
             _voyageActuel = voyage;
@@ -366,65 +609,212 @@ namespace TripTailorSimple.WPF.Views
 
         #region Détail
 
-        private async Task ChargerDetailAsync(PropositionVoyage voyage)
+        private async System.Threading.Tasks.Task ChargerDetailAsync(PropositionVoyage voyage)
         {
-            TxtVillePays.Text = $"{voyage.Ville}, {voyage.Pays}";
-            TxtRegionPays.Text = $"{voyage.Region} • budget estimé {voyage.PrixTotal} €";
+            TxtVillePays.Text = voyage.VillePays;
+            TxtRegionPays.Text = $"{voyage.Region} • {voyage.NombreJours} jours • {voyage.PrixTotal} €";
+            TxtDetailRegionShort.Text = RegionVersLabel(voyage.Region);
+            TxtDetailStyle.Text = voyage.StyleVoyageAffiche;
             TxtDescription.Text = string.IsNullOrWhiteSpace(voyage.Description)
                 ? "Aucune description disponible."
                 : voyage.Description;
 
-            ChargerImage(ImgDestination, voyage.UrlImage);
+            ChargerImage(ImgDestinationHero, voyage.UrlImage);
 
-            ListeBudget.ItemsSource = new List<string>
-            {
-                $"Vol : {voyage.PrixVol} €",
-                $"Hôtel : {voyage.PrixHotel} €",
-                $"Activités : {voyage.PrixActivites} €",
-                $"Total : {voyage.PrixTotal} €"
-            };
+            TxtCompagnieSuggeree.Text = $"Compagnie suggérée : {voyage.CompagnieVol}";
+            TxtLienVol.Text = "Rechercher sur Google Flights";
+            TxtHotelSuggere.Text = voyage.NomHotel;
+            TxtHotelLien.Text = "Hôtel conseillé selon ton style de voyage";
 
-            ListeActivitesPayantes.ItemsSource = voyage.Activites;
-            ListeIdeesGratuites.ItemsSource = voyage.IdeesGratuites;
-
-            PanelTags.Children.Clear();
-            foreach (var tag in voyage.Etiquettes)
-            {
-                PanelTags.Children.Add(new Border
-                {
-                    Margin = new Thickness(0, 0, 8, 8),
-                    Padding = new Thickness(10, 6, 10, 6),
-                    CornerRadius = new CornerRadius(12),
-                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#EEF8F6")),
-                    Child = new TextBlock
-                    {
-                        Text = tag,
-                        FontWeight = FontWeights.SemiBold,
-                        Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#006B5F"))
-                    }
-                });
-            }
-
-            TxtMeteoActuelle.Text = "Chargement météo...";
-            ListePrevisions.ItemsSource = null;
+            TxtPrixVolLabel.Text = $"✈ Vol ({voyage.CompagnieVol})";
+            TxtPrixVolValeur.Text = $"{voyage.PrixVol} €";
+            TxtPrixHotelLabel.Text = $"🏨 Hôtel ({voyage.NomHotel})";
+            TxtPrixHotelValeur.Text = $"{voyage.PrixHotel} €";
+            TxtPrixActivitesLabel.Text = "🎟 Activités";
+            TxtPrixActivitesValeur.Text = $"{voyage.PrixActivites} €";
+            TxtPrixTotal.Text = $"{voyage.PrixTotal} €";
 
             var previsions = await _serviceMeteo.RecupererPrevisionsJournalieresAsync(
                 voyage.Latitude,
                 voyage.Longitude,
-                5);
+                Math.Min(Math.Max(voyage.NombreJours, 7), 7));
+
+            ConstruireMeteo(previsions, voyage.TemperatureMoyenne);
+            ConstruireProgramme(voyage.Itineraire);
+            ConstruireListeTexte(PanelActivitesPayantes, voyage.Activites, "#56B9E9");
+            ConstruireListeTexte(PanelIdeesGratuites, voyage.IdeesGratuites, "#32C48D");
+        }
+
+        private void ConstruireMeteo(List<PrevisionJournaliere> previsions, double temperatureSecours)
+        {
+            PanelPrevisionsMeteo.Children.Clear();
 
             if (previsions.Count == 0)
             {
-                TxtMeteoActuelle.Text = $"{voyage.TemperatureMoyenne:0.#} °C";
-                ListePrevisions.ItemsSource = new List<string> { "Prévisions indisponibles" };
+                PanelPrevisionsMeteo.Children.Add(new Border
+                {
+                    Width = 180,
+                    Margin = new Thickness(0, 0, 14, 14),
+                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F7F9FB")),
+                    BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E5E2")),
+                    BorderThickness = new Thickness(1),
+                    CornerRadius = new CornerRadius(12),
+                    Padding = new Thickness(14),
+                    Child = new StackPanel
+                    {
+                        Children =
+                        {
+                            new TextBlock
+                            {
+                                Text = "Prévisions indisponibles",
+                                FontWeight = FontWeights.Bold
+                            },
+                            new TextBlock
+                            {
+                                Text = $"{temperatureSecours:0.#}°C",
+                                Margin = new Thickness(0,8,0,0),
+                                FontSize = 18,
+                                FontWeight = FontWeights.Black,
+                                Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D98B9"))
+                            }
+                        }
+                    }
+                });
+                return;
             }
-            else
+
+            foreach (var p in previsions.Take(7))
             {
-                TxtMeteoActuelle.Text = $"{previsions[0].Temperature:0.#} °C - {previsions[0].ResumeMeteo}";
-                ListePrevisions.ItemsSource = previsions
-                    .Select(p => $"{p.Jour} - {p.Temperature:0.#} °C - {p.ResumeMeteo}")
-                    .ToList();
+                var card = new Border
+                {
+                    Width = 145,
+                    Margin = new Thickness(0, 0, 14, 14),
+                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F7F9FB")),
+                    BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E5E2")),
+                    BorderThickness = new Thickness(1),
+                    CornerRadius = new CornerRadius(12),
+                    Padding = new Thickness(14)
+                };
+
+                var stack = new StackPanel();
+
+                stack.Children.Add(new TextBlock
+                {
+                    Text = p.Jour,
+                    FontSize = 12,
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6F7A86"))
+                });
+
+                stack.Children.Add(new TextBlock
+                {
+                    Text = IcôneMeteo(p.ResumeMeteo),
+                    FontSize = 20,
+                    Margin = new Thickness(0, 8, 0, 8)
+                });
+
+                stack.Children.Add(new TextBlock
+                {
+                    Text = $"{p.Temperature:0.#}°C",
+                    FontSize = 18,
+                    FontWeight = FontWeights.Black,
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1D2733"))
+                });
+
+                stack.Children.Add(new TextBlock
+                {
+                    Text = p.ResumeMeteo,
+                    Margin = new Thickness(0, 6, 0, 0),
+                    TextWrapping = TextWrapping.Wrap,
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#6F7A86"))
+                });
+
+                card.Child = stack;
+                PanelPrevisionsMeteo.Children.Add(card);
             }
+        }
+
+        private void ConstruireProgramme(List<JourItineraire> itineraire)
+        {
+            PanelProgramme.Children.Clear();
+
+            foreach (var jour in itineraire)
+            {
+                var bloc = new Border
+                {
+                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F5F7FA")),
+                    BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E8E5E2")),
+                    BorderThickness = new Thickness(1),
+                    CornerRadius = new CornerRadius(12),
+                    Padding = new Thickness(16),
+                    Margin = new Thickness(0, 0, 0, 12)
+                };
+
+                var stack = new StackPanel();
+
+                stack.Children.Add(new TextBlock
+                {
+                    Text = jour.Titre,
+                    FontWeight = FontWeights.Bold,
+                    Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#2D98B9"))
+                });
+
+                foreach (var etape in jour.Etapes)
+                {
+                    stack.Children.Add(new TextBlock
+                    {
+                        Text = etape,
+                        Margin = new Thickness(0, 6, 0, 0),
+                        Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#374151"))
+                    });
+                }
+
+                bloc.Child = stack;
+                PanelProgramme.Children.Add(bloc);
+            }
+        }
+
+        private void ConstruireListeTexte(StackPanel panel, List<string> lignes, string couleurBord)
+        {
+            panel.Children.Clear();
+
+            foreach (var ligne in lignes)
+            {
+                panel.Children.Add(new Border
+                {
+                    Background = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F5F7FA")),
+                    BorderBrush = new SolidColorBrush((Color)ColorConverter.ConvertFromString(couleurBord)),
+                    BorderThickness = new Thickness(3, 0, 0, 0),
+                    CornerRadius = new CornerRadius(8),
+                    Padding = new Thickness(14),
+                    Margin = new Thickness(0, 0, 0, 10),
+                    Child = new TextBlock
+                    {
+                        Text = ligne,
+                        Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#1D2733"))
+                    }
+                });
+            }
+        }
+
+        private static string IcôneMeteo(string resume)
+        {
+            if (resume.Contains("Orage", StringComparison.OrdinalIgnoreCase)) return "⛈";
+            if (resume.Contains("Pluie", StringComparison.OrdinalIgnoreCase)) return "🌧";
+            if (resume.Contains("Neige", StringComparison.OrdinalIgnoreCase)) return "❄";
+            if (resume.Contains("Brouillard", StringComparison.OrdinalIgnoreCase)) return "🌫";
+            if (resume.Contains("nuage", StringComparison.OrdinalIgnoreCase)) return "⛅";
+            return "☀";
+        }
+
+        private string RegionVersLabel(string region)
+        {
+            if (region.Contains("Asie", StringComparison.OrdinalIgnoreCase)) return "ASIA";
+            if (region.Contains("Amérique", StringComparison.OrdinalIgnoreCase) || region.Contains("Caraïbes", StringComparison.OrdinalIgnoreCase)) return "AMERICAS";
+            if (region.Contains("Europe", StringComparison.OrdinalIgnoreCase)) return "EUROPE";
+            if (region.Contains("Afrique", StringComparison.OrdinalIgnoreCase)) return "AFRICA";
+            if (region.Contains("Océanie", StringComparison.OrdinalIgnoreCase)) return "OCEANIA";
+            if (region.Contains("Orient", StringComparison.OrdinalIgnoreCase)) return "MIDDLE EAST";
+            return region.ToUpperInvariant();
         }
 
         private void BtnVoirVols_Click(object sender, RoutedEventArgs e)
@@ -447,50 +837,6 @@ namespace TripTailorSimple.WPF.Views
 
         #endregion
 
-        #region UI
-
-        private void BtnReinitialiser_Click(object sender, RoutedEventArgs e)
-        {
-            ComboClimat.SelectedIndex = 1;
-            ComboStyleVoyage.SelectedIndex = 1;
-            SliderBudget.Value = 2000;
-            TxtNombreJours.Text = "7";
-
-            ChkEurope.IsChecked = false;
-            ChkAsie.IsChecked = false;
-            ChkAfrique.IsChecked = false;
-            ChkAmeriques.IsChecked = false;
-            ChkOceanie.IsChecked = false;
-
-            MettreAJourBudget();
-            AfficherRecherche();
-        }
-
-        private void SliderBudget_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            MettreAJourBudget();
-        }
-
-        private void MettreAJourBudget()
-        {
-            if (TxtBudget != null)
-                TxtBudget.Text = $"{(int)SliderBudget.Value} €";
-        }
-
-        private void BtnMoinsJour_Click(object sender, RoutedEventArgs e)
-        {
-            int jours = int.Parse(TxtNombreJours.Text);
-            if (jours > 2)
-                TxtNombreJours.Text = (jours - 1).ToString();
-        }
-
-        private void BtnPlusJour_Click(object sender, RoutedEventArgs e)
-        {
-            int jours = int.Parse(TxtNombreJours.Text);
-            if (jours < 30)
-                TxtNombreJours.Text = (jours + 1).ToString();
-        }
-
         private static void ChargerImage(Image imageControl, string? url)
         {
             try
@@ -506,7 +852,6 @@ namespace TripTailorSimple.WPF.Views
                 bitmap.UriSource = new Uri(url, UriKind.Absolute);
                 bitmap.CacheOption = BitmapCacheOption.OnLoad;
                 bitmap.EndInit();
-
                 imageControl.Source = bitmap;
             }
             catch
@@ -514,7 +859,5 @@ namespace TripTailorSimple.WPF.Views
                 imageControl.Source = null;
             }
         }
-
-        #endregion
     }
 }
